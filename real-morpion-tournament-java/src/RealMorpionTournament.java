@@ -17,7 +17,7 @@ public class RealMorpionTournament {
      */
     public static void main(String[] args) {
         JeuMorpion jeu = new JeuMorpion();
-        jeu.demarrerJeu();
+        jeu.lancerJeu();
     }
     
 }
