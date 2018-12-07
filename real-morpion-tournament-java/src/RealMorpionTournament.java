@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 
+import Controlleur.JeuMorpion;
+
 /**
  *
  * @author grosa
@@ -14,7 +16,8 @@ public class RealMorpionTournament {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        JeuMorpion jeu = new JeuMorpion();
+        jeu.demarrerJeu();
     }
     
 }

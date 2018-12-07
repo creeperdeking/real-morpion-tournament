@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Modele;
+package Utilitaires.Enums;
 
 /**
  *
  * @author grosa
  */
-public class EtatCase {
-    
+public enum EEtatCase {
+    Vide,
+    Croix,
+    Rond;
 }
