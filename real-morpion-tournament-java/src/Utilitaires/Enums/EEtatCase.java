@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controlleur;
+package Utilitaires.Enums;
 
 /**
  *
  * @author grosa
  */
-public class ControlleurReglesJeu {
-    
+public enum EEtatCase {
+    Vide,
+    Croix,
+    Rond;
 }

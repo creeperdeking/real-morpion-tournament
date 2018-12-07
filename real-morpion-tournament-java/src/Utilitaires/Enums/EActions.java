@@ -3,12 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Messages;
+package Utilitaires.Enums;
 
 /**
  *
  * @author grosa
  */
-public class BoutonsIhmInscJoueur {
-    
+public enum EActions {
+    Ajouter,
+    Supprimer,
+    Continuer,
+    ReglesJeu,
+    Retour,
+    ClicCase;
 }
