@@ -17,11 +17,13 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import java.awt.GridLayout;
+import java.util.Hashtable;
 import java.util.Observable;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -45,136 +47,114 @@ public class VueInscriptionJoueurs extends Observable{
         window = new JFrame();
         window.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
         // Définit la taille de la fenêtre en pixels
-        window.setSize(600, 600);
+        window.setSize(750, 200);
+        
+        window.setResizable(false);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         window.setLocation(dim.width/2-window.getSize().width/2, dim.height/2-window.getSize().height/2);
-        JPanel mainPanel=new JPanel(new BorderLayout());
-        window.add(mainPanel);
         
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 0));
         
-        JPanel leftPan=new JPanel();
-        mainPanel.add(leftPan,BorderLayout.WEST);
+        // ----- Left Pan -----
+        JPanel leftPan = new JPanel(new BorderLayout(10, 10));
         
-        
-        JPanel topleftPan=new JPanel();
-        leftPan.add(topleftPan,BorderLayout.NORTH);
-        
-        
-               
-        //left part of the view with names
-        
-        JLabel lab1=new JLabel("Liste des inscrits:");
-        topleftPan.add(lab1);
-        
-        
-        
-        JPanel downleftPan=new JPanel();
-        leftPan.add(downleftPan,BorderLayout.SOUTH);
-        
-        //button in the bottom left
-        retirer=new JButton("Retirer");
-        downleftPan.add(retirer);
-        
-        JPanel midleftPan=new JPanel();
-        leftPan.add(midleftPan,BorderLayout.CENTER);
+        JLabel topleftPan = new JLabel("Liste des inscrits:");
+        leftPan.add(topleftPan, BorderLayout.NORTH);
         
         //list of name plates in the left
-        DefaultListModel namelist=new DefaultListModel();
+        DefaultListModel namelist = new DefaultListModel();
+        JList names = new JList(namelist);
         
-        JList names=new JList(namelist);
+        
         
         namelist.addElement("dai2");
         namelist.addElement("dais");
         namelist.addElement("dai3");
         namelist.addElement("daih");
-        
-        midleftPan.add(names);
-        
-
-
-        
-        
-
-        
-        //right part of the view with Options
-        JPanel rightPan=new JPanel();
-        mainPanel.add(rightPan,BorderLayout.EAST);
+        namelist.addElement("daih");
+        namelist.addElement("daih");
+        namelist.addElement("daih");
+        namelist.addElement("daih");
+        namelist.addElement("daih");
+        namelist.addElement("daih");
+        namelist.addElement("daih");
         
         
+        JScrollPane midleftPan = new JScrollPane(names);
         
-        JPanel toprightPan=new JPanel(new GridLayout(3,2));
+       
+        
+      
+        leftPan.add(midleftPan, BorderLayout.CENTER);
+        
+        JButton downleftPan = new JButton("Retirer");
+        leftPan.add(downleftPan, BorderLayout.SOUTH);
+       
+        mainPanel.add(leftPan, BorderLayout.WEST);
+        
+        // ----- Right Pan -----
+        JPanel rightPan = new JPanel(new BorderLayout());
+        
+        
+        JPanel toprightPan = new JPanel(new GridLayout(2,2));
+        JLabel lbl=new JLabel("Inscrivez les joueurs");
+        lbl.setFont(new Font("Arial", Font.BOLD, 25));
+        
+        toprightPan.add(lbl);
+        toprightPan.add(new JLabel(""));
+        toprightPan.add(new JLabel("Ecrivez le nom du joueurs:"));
+        JTextField textNom = new JTextField(20);
+        toprightPan.add(textNom);
         rightPan.add(toprightPan,BorderLayout.NORTH);
-       
         
+        JPanel midrightPan = new JPanel(new BorderLayout());
+        midrightPan.add(new JLabel("Choisissez l'interface adaptée à son âge:"), BorderLayout.NORTH);
         
-        //informations on the top right
-        JLabel lbl;
-        nom=new JTextField();
- 
-                lbl=new JLabel("Inscrivez les joueurs");
-                toprightPan.add(lbl);
-                
+        // for adapting the appearancve of the board to the age
      
-                lbl=new JLabel("");
-                toprightPan.add(lbl);
-                
-       
-                lbl=new JLabel("Ecrivez le nom du joueurs:");
-                toprightPan.add(lbl);
-                
-             
-                toprightPan.add(nom);
-                
-           
-                lbl=new JLabel("Choisissez l'interface addaptée");
-                toprightPan.add(lbl);
-                
-              
-                lbl=new JLabel("à son age:");
-                toprightPan.add(lbl);
-               
+        
+        JLabel sldlabel=new JLabel();
+        
+        JSlider sld = new JSlider(0,3);
+        sld.setPaintLabels(true);
+        
+        Hashtable position = new Hashtable();
+        position.put(0, new JLabel("Enfant"));
+        position.put(1, new JLabel("Ado"));
+        position.put(2, new JLabel("Adulte"));
+        position.put(3, new JLabel("Senior"));
         
         
+        sld.setLabelTable(position);
+      
+        JPanel sldContainer = new JPanel();
+        sldContainer.add(sld);
         
+        midrightPan.add(sldContainer);
         
-        JPanel midrightPan=new JPanel();
         rightPan.add(midrightPan,BorderLayout.CENTER);
         
-        // for sorting the interface by age
-        JSlider sld=new JSlider();
-        midrightPan.add(sld);
+        
         
         
         // for the buttons on the bottom right
-        JPanel downrightPan=new JPanel(new GridLayout(2,3));
-        rightPan.add(downrightPan,BorderLayout.SOUTH);
+        JPanel downrightPan = new JPanel(new GridLayout(2,3,5,5));
+        rightPan.add(downrightPan, BorderLayout.SOUTH);
         
-             
-         JLabel lbl2;
          ajouter=new JButton("Ajouter ce joueur");
-         rdj=new JButton("Règeles du jeu");
+         rdj=new JButton("Règles du jeu");
          start=new JButton("Commencer");
         
-            
-   
-                lbl2=new JLabel("");
-                downrightPan.add(lbl2);
-   
-                lbl2=new JLabel("");
-                downrightPan.add(lbl2);
-  
-               
-                downrightPan.add(ajouter);
-   
-                lbl2=new JLabel("");
-                downrightPan.add(lbl2);
-       
+        downrightPan.add(new JLabel());
+        downrightPan.add(new JLabel());
+        downrightPan.add(ajouter);
+        downrightPan.add(new JLabel());
+        downrightPan.add(rdj);
+        downrightPan.add(start);
                 
-                downrightPan.add(rdj);
-           
-                downrightPan.add(start);
+        mainPanel.add(rightPan, BorderLayout.CENTER);
         
-        
+        window.add(mainPanel);
     }
     
         public void afficher() {
