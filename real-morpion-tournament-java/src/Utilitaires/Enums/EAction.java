@@ -3,12 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Vue;
+package Utilitaires.Enums;
 
 /**
  *
  * @author grosa
  */
-public class FrameClassementAdversaire {
-    
+public enum EAction {
+    AJOUTER,
+    SUPPRIMER,
+    CONTINUER,
+    REGLES_JEU,
+    RETOUR,
+    CLIC_CASE;
 }

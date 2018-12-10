@@ -5,20 +5,20 @@
  */
 package Utilitaires.Messages;
 
-import Utilitaires.Enums.EActions;
+import Utilitaires.Enums.EAction;
 
 /**
  *
  * @author grosa
  */
 public class Message {
-    private EActions action;
+    private EAction action;
     
-    public Message(EActions action) {
+    public Message(EAction action) {
         this.action = action;
     }
     
-    public EActions getAction() {
+    public EAction getAction() {
         return this.action;
     }
 }

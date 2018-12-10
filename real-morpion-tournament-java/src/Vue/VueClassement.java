@@ -3,15 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Utilitaires.Enums;
+package Vue;
+
+import java.util.Observable;
 
 /**
  *
  * @author grosa
  */
-public enum EEtatCase {
-    VIDE,
-    CROIX,
-    ROND,
-    EGALITE; // TODO: Rendre moins dégeulasse
+public class VueClassement extends Observable {
+    
 }

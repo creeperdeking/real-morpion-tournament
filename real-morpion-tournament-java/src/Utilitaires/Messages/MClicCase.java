@@ -5,7 +5,7 @@
  */
 package Utilitaires.Messages;
 
-import Utilitaires.Enums.EActions;
+import Utilitaires.Enums.EAction;
 
 /**
  *
@@ -15,7 +15,7 @@ public class MClicCase extends Message {
     // Lignes et colonnes de la grille, numérotés à partir de 0
     private int ligne, colonne;
     
-    public MClicCase(EActions action, int ligne, int colonne) {
+    public MClicCase(EAction action, int ligne, int colonne) {
         super(action);
         
         this.ligne = ligne;

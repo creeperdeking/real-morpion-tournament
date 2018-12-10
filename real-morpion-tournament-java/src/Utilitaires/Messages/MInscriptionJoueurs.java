@@ -5,7 +5,7 @@
  */
 package Utilitaires.Messages;
 
-import Utilitaires.Enums.EActions;
+import Utilitaires.Enums.EAction;
 import java.util.ArrayList;
 
 /**
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class MInscriptionJoueurs extends Message {
     private ArrayList<String> nomJoueurs;
     
-    public MInscriptionJoueurs(EActions action, ArrayList<String> nomJoueurs) {
+    public MInscriptionJoueurs(EAction action, ArrayList<String> nomJoueurs) {
         super(action);
         
         this.nomJoueurs = nomJoueurs;

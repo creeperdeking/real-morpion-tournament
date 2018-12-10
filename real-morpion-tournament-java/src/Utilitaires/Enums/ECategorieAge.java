@@ -9,11 +9,8 @@ package Utilitaires.Enums;
  *
  * @author grosa
  */
-public enum EActions {
-    Ajouter,
-    Supprimer,
-    Continuer,
-    ReglesJeu,
-    Retour,
-    ClicCase;
+public enum ECategorieAge {
+    ENFANT,
+    ADO,
+    SENIOR
 }
