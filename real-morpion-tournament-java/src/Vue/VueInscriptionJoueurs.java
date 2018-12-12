@@ -5,6 +5,7 @@
  */
 package Vue;
 
+import Utilitaires.Enums.EAction;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -17,6 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Hashtable;
 import java.util.Observable;
 import javax.swing.ButtonGroup;
@@ -27,6 +30,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import Utilitaires.Messages.MInscriptionJoueurs;
+import Utilitaires.Messages.Message;
+import java.util.ArrayList;
+import org.w3c.dom.NameList;
 /**
  *
  * @author grosa
@@ -87,8 +94,23 @@ public class VueInscriptionJoueurs extends Observable{
       
         leftPan.add(midleftPan, BorderLayout.CENTER);
         
-        JButton downleftPan = new JButton("Retirer");
-        leftPan.add(downleftPan, BorderLayout.SOUTH);
+        retirer = new JButton("Retirer");
+         
+        names.getSelectedValuesList();
+         
+        retirer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                setChanged();
+                ArrayList <String> nomliste=new ArrayList<>();
+                
+                notifyObservers();
+                clearChanged();
+            }
+         });
+         
+         
+        leftPan.add(retirer, BorderLayout.SOUTH);
        
         mainPanel.add(leftPan, BorderLayout.WEST);
         
@@ -103,8 +125,9 @@ public class VueInscriptionJoueurs extends Observable{
         toprightPan.add(lbl);
         toprightPan.add(new JLabel(""));
         toprightPan.add(new JLabel("Ecrivez le nom du joueurs:"));
-        JTextField textNom = new JTextField(20);
-        toprightPan.add(textNom);
+        
+        nom= new JTextField(20);
+        toprightPan.add(nom);
         rightPan.add(toprightPan,BorderLayout.NORTH);
         
         JPanel midrightPan = new JPanel(new BorderLayout());
@@ -142,8 +165,40 @@ public class VueInscriptionJoueurs extends Observable{
         rightPan.add(downrightPan, BorderLayout.SOUTH);
         
          ajouter=new JButton("Ajouter ce joueur");
+         
+         ajouter.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                setChanged();
+                ArrayList <String> noms=new ArrayList<>();
+                noms.add(nom.getText());
+                MInscriptionJoueurs ins=new MInscriptionJoueurs(EAction.AJOUTER, noms);
+                notifyObservers(ins);
+                clearChanged();
+            }
+         });
+         
          rdj=new JButton("Règles du jeu");
+         rdj.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                setChanged();
+                notifyObservers(new Message(EAction.REGLES_JEU));
+                clearChanged();
+            }
+         });
+         
+   
+         
          start=new JButton("Commencer");
+         start.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                setChanged();
+                notifyObservers(new Message(EAction.CONTINUER));
+                clearChanged();
+            }
+         });
         
         downrightPan.add(new JLabel());
         downrightPan.add(new JLabel());

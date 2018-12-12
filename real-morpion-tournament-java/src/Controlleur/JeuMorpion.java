@@ -82,8 +82,15 @@ public class JeuMorpion implements Observer {
                 }
             }
             else { // Si il s'agit d'un message normal
+                Message msg = (Message)arg1;
                 if (arg0 instanceof VueInscriptionJoueurs) {
-                    
+                   switch(msg.getAction()){
+                       case REGLES_JEU:
+                           System.out.println("blablablabla");
+                       case CONTINUER:
+                           
+                   
+                   }
                 }
                 else if (arg0 instanceof VueReglesJeu) {
                     //vueReglesJeu.
