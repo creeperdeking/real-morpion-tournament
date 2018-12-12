@@ -5,6 +5,11 @@
  */
 package Vue;
 
+import Utilitaires.Enums.EAction;
+import Utilitaires.Enums.EEtatCase;
+import Utilitaires.Enums.MyButton;
+import Utilitaires.Messages.MClicCase;
+import Utilitaires.Messages.Message;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -35,9 +40,14 @@ public class VueJeuMorpion extends Observable {
     private final int defaultWidth = 400;
     
     private JLabel nomJoueurCourant;
-    private JPanel iconeSymboleActuel;
+    private JLabel iconeSymboleActuel;
+    
+    private MyButton bCases[][];
     
     public VueJeuMorpion() {
+        
+        bCases = new MyButton[3][3];
+        
         fenetre = new JFrame();
         fenetre.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
         // Définit la taille de la fenêtre en pixels
@@ -51,7 +61,7 @@ public class VueJeuMorpion extends Observable {
         
         JLabel texteTourDe = new JLabel("Tour de :", SwingConstants.CENTER);
         nomJoueurCourant = new JLabel("Jean Jacques", SwingConstants.CENTER);
-        iconeSymboleActuel = new JPanel();
+        iconeSymboleActuel = new JLabel();
         
         JPanel barre = new JPanel();
         barre.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
@@ -66,26 +76,43 @@ public class VueJeuMorpion extends Observable {
         
         JPanel pannelGrille = new JPanel(new GridLayout(3, 3));
         pannelGrille.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
-        for (int i = 0; i < 9; i++) {
-            JButton button = new JButton("_");
-            button.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
-            
-            button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setChanged();
-                notifyObservers("s");
-                clearChanged();
-            }});
-            
-            pannelGrille.add(button);
+        for (int ligne = 2; ligne >= 0; ligne--) {
+            for (int colonne = 0; colonne < 3; colonne++) {
+                MyButton button = new MyButton("_", ligne, colonne);
+                button.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
+
+                button.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        setChanged();
+
+                        notifyObservers(new MClicCase(EAction.CLIC_CASE, ((MyButton) e.getSource()).getLigne(), ((MyButton) e.getSource()).getColonne()));
+                        clearChanged();
+                    }});
+                bCases[ligne][colonne] = button;
+                pannelGrille.add(button);
+            }
         }
         
         
         JPanel pannelBoutons = new JPanel(new BorderLayout(0, 0));
         
         JButton boutonAnnuller = new JButton("Corriger le tour précédent");
+        boutonAnnuller.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        setChanged();
+                        notifyObservers(new Message(EAction.RETOUR));
+                        clearChanged();
+                    }});
         JButton boutonRegles = new JButton("Règles du Jeu");
+        boutonRegles.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        setChanged();
+                        notifyObservers(new Message(EAction.REGLES_JEU));
+                        clearChanged();
+                    }});
         
         pannelBoutons.add(boutonAnnuller, BorderLayout.WEST);
         pannelBoutons.add(boutonRegles, BorderLayout.EAST);
@@ -98,8 +125,34 @@ public class VueJeuMorpion extends Observable {
         fenetre.add(agencementFenetre);
     }
     
+    public void setEtatCase(EEtatCase etat, int ligne, int colonne) {
+        
+        switch (etat) {
+            case VIDE:
+                bCases[ligne][colonne].setText("_");
+                break;
+            case CROIX:
+                bCases[ligne][colonne].setText("X");
+                break;
+            case ROND:
+                bCases[ligne][colonne].setText("O");
+                break;
+        }
+    }
+    
     public void setNomJoueurCourant(String nomJ) {
         nomJoueurCourant.setText(nomJ);
+    }
+    
+    public void setSymboleJoueurCourant(EEtatCase etat) {
+        switch (etat) {
+            case CROIX:
+                iconeSymboleActuel.setText("X");
+                break;
+            case ROND:
+                iconeSymboleActuel.setText("O");
+                break;
+        }
     }
     
     public void afficherFenetre(boolean afficher) {

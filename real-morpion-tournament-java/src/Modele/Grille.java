@@ -20,16 +20,29 @@ public class Grille {
         effacerCases();
     }
     
-    public void effacerCases() {
-        for (int x = 0; x != 3; x++) {
-            for (int y = 0; y != 3; y++) {
-                cases[x][y] = EEtatCase.VIDE;
+    public Grille(Grille grille) {
+        cases = new EEtatCase[3][3];
+        for (int ligne = 0; ligne != 3; ligne++) {
+            for (int colonne = 0; colonne != 3; colonne++) {
+                cases[ligne][colonne] = grille.getEtatCase(ligne, colonne);
             }
         }
     }
     
-    public void setEtatCase(EEtatCase etat, int x, int y) {
-        cases[x][y] = etat;
+    public void effacerCases() {
+        for (int ligne = 0; ligne != 3; ligne++) {
+            for (int colonne = 0; colonne != 3; colonne++) {
+                cases[ligne][colonne] = EEtatCase.VIDE;
+            }
+        }
+    }
+    
+    public void setEtatCase(EEtatCase etat, int ligne, int colonne) {
+        cases[ligne][colonne] = etat;
+    }
+    
+    public EEtatCase getEtatCase(int ligne, int colonne) {
+        return cases[ligne][colonne];
     }
     
     // Cette fonction parcourt la grille à la recherche
@@ -106,11 +119,11 @@ public class Grille {
             return valeurRetour;
         
         // On teste si la grille est pleine
-        boolean pleine = false;
+        boolean pleine = true;
         for (int x = 0; x < 3; x++) {
             for (int y = 1; y < 3; y++) {
                 if (cases[x][y] == EEtatCase.VIDE)
-                    pleine = true;
+                    pleine = false;
             }
         }
         
