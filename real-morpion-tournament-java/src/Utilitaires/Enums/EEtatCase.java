@@ -12,6 +12,5 @@ package Utilitaires.Enums;
 public enum EEtatCase {
     VIDE,
     CROIX,
-    ROND,
-    EGALITE; // TODO: Rendre moins dégeulasse
+    ROND;
 }
