@@ -105,6 +105,7 @@ public class JeuMorpion implements Observer {
                         case AJOUTER:
                             String nomJoueur = ((MInscriptionJoueurs) arg1).getNomJoueurs().get(0);
                             joueurs.add(new Joueur(nomJoueur));
+                            vueInscriptionJoueurs.addJoueur(nomJoueur);
                         case SUPPRIMER:
                             ArrayList<String> nomJoueurs =((MInscriptionJoueurs) arg1).getNomJoueurs();
                             for (String nom : nomJoueurs) {

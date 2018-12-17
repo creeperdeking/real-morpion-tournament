@@ -46,6 +46,7 @@ public class VueInscriptionJoueurs extends Observable{
     private JButton ajouter;
     private JButton start;
     private JTextField nom;
+    private DefaultListModel namelist;
     
     
     
@@ -69,7 +70,7 @@ public class VueInscriptionJoueurs extends Observable{
         leftPan.add(topleftPan, BorderLayout.NORTH);
         
         //list of name plates in the left
-        DefaultListModel namelist = new DefaultListModel();
+        namelist = new DefaultListModel();
         JList names = new JList(namelist);
         
         
@@ -86,12 +87,8 @@ public class VueInscriptionJoueurs extends Observable{
         namelist.addElement("daih");
         namelist.addElement("daih");
         
-        
         JScrollPane midleftPan = new JScrollPane(names);
         
-       
-        
-      
         leftPan.add(midleftPan, BorderLayout.CENTER);
         
         retirer = new JButton("Retirer");
@@ -219,6 +216,10 @@ public class VueInscriptionJoueurs extends Observable{
     private JPanel getCellule(int i) {
         JPanel panelCellule = new JPanel();
         return panelCellule ;
+    }
+    
+    public void addJoueur(String nom) {
+        namelist.addElement(nom);
     }
 
     public static void main(String [] args) {
