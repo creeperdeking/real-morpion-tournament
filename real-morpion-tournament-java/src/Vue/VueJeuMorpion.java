@@ -41,8 +41,9 @@ public class VueJeuMorpion extends Observable {
     private MyButton bCases[][];
     
     public VueJeuMorpion() {
-        fenetre.setResizable(false);
+        fenetre = new JFrame();
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        fenetre.setResizable(false);
         fenetre.setLocation(dim.width/2-fenetre.getSize().width/2, dim.height/2-fenetre.getSize().height/2);
         bCases = new MyButton[3][3];
         
