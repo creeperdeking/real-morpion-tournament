@@ -25,8 +25,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import Utilitaires.Messages.MInscriptionJoueurs;
 import Utilitaires.Messages.Message;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import javax.swing.BorderFactory;
+import javax.swing.border.MatteBorder;
 
 /**
  *
@@ -34,89 +37,82 @@ import java.util.Hashtable;
  */
 public class VueInscriptionJoueurs extends Observable{
     
-    private JFrame window;
-    private JButton retirer;
-    private JButton rdj;
-    private JButton ajouter;
-    private JButton start;
-    private JTextField nom;
-    private JList nomsListe;
+    private JFrame fenetre;
+    
+    private JButton boutonAjouter;
+    private JButton boutonRetirer;
+    private JButton boutonReglesJeu;
+    private JButton boutonCommencer;
+    private JTextField textFieldNom;
+    private JList listeNomsJoueurs;
     private DefaultListModel nomsListModel;
     
-    private ArrayList<String> listeJoueursSelectionnes;
     
-    
-    public VueInscriptionJoueurs(){
-        listeJoueursSelectionnes = new ArrayList();
-        
-        window = new JFrame();
-        window.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-        // Définit la taille de la fenêtre en pixels
-        window.setSize(750, 200);
-        
-        window.setResizable(false);
+    public VueInscriptionJoueurs() {
+        fenetre = new JFrame("Inscrire les joueurs");
+        fenetre.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
+        fenetre.setSize(600, 250);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        window.setLocation(dim.width/2-window.getSize().width/2, dim.height/2-window.getSize().height/2);
+        fenetre.setLocation(dim.width/2-fenetre.getSize().width/2, dim.height/2-fenetre.getSize().height/2);
+        fenetre.setResizable(true);
         
-        JPanel mainPanel = new JPanel(new BorderLayout(10, 0));
+        JPanel pannelPrincipal = new JPanel(new BorderLayout(10, 0));
+        fenetre.add(pannelPrincipal);
         
-        // ----- Left Pan -----
-        JPanel leftPan = new JPanel(new BorderLayout(10, 10));
+        // =========== PANNEL DE GAUCHE ==========
+        JPanel pannelGauche = new JPanel(new BorderLayout(10, 10));
+        pannelPrincipal.add(pannelGauche, BorderLayout.WEST);
+        pannelGauche.setBorder(new MatteBorder(0, 0, 0, 1, Color.GRAY));
         
-        JLabel topleftPan = new JLabel("Liste des inscrits:");
-        leftPan.add(topleftPan, BorderLayout.NORTH);
+        // ----- Haut --------
+        JLabel labelListeInscrits = new JLabel("Liste des inscrits:");
+        pannelGauche.add(labelListeInscrits, BorderLayout.NORTH);
         
-        //list of name plates in the left
+        // ----- Centre ------
         nomsListModel = new DefaultListModel();
-        nomsListe = new JList(nomsListModel);
+        nomsListModel.setSize(1);
+        listeNomsJoueurs = new JList(nomsListModel);
         
-        JScrollPane midleftPan = new JScrollPane(nomsListe);
+        JScrollPane midleftPan = new JScrollPane(listeNomsJoueurs);
       
-        leftPan.add(midleftPan, BorderLayout.CENTER);
+        pannelGauche.add(midleftPan, BorderLayout.CENTER);
         
-        retirer = new JButton("Retirer");
-         
-        retirer.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                setChanged();
-                listeJoueursSelectionnes = new ArrayList(nomsListe.getSelectedValuesList());
-                notifyObservers(new MInscriptionJoueurs(EAction.SUPPRIMER, listeJoueursSelectionnes));
-                clearChanged();
-            }
-         });
-         
-         
-        leftPan.add(retirer, BorderLayout.SOUTH);
-       
-        mainPanel.add(leftPan, BorderLayout.WEST);
+        // ----- Bas ------
+        boutonRetirer = new JButton("Retirer");
+        pannelGauche.add(boutonRetirer, BorderLayout.SOUTH);
         
-        // ----- Right Pan -----
-        JPanel rightPan = new JPanel(new BorderLayout());
+        // =========== PANNEL DE DROITE ==========
+        JPanel pannelDroite = new JPanel(new BorderLayout(0, 20));
+        pannelPrincipal.add(pannelDroite);
         
+        // --- Pannel haut ----
+        JPanel pannelDroitHaut = new JPanel(new BorderLayout());
+        pannelDroite.add(pannelDroitHaut, BorderLayout.NORTH);
         
-        JPanel toprightPan = new JPanel(new GridLayout(2,2));
-        JLabel lbl=new JLabel("Inscrivez les joueurs");
-        lbl.setFont(new Font("Arial", Font.BOLD, 25));
+        // Sous-pannel haut haut:
+        JLabel labelInscrivezJoueurs = new JLabel("Inscrivez les joueurs");
+        labelInscrivezJoueurs.setFont(new Font("Arial", Font.BOLD, 25));
+        pannelDroitHaut.add(labelInscrivezJoueurs, BorderLayout.NORTH);
         
-        toprightPan.add(lbl);
-        toprightPan.add(new JLabel(""));
-        toprightPan.add(new JLabel("Ecrivez le nom du joueurs:"));
+        // Sous-panel haut centre:
+        JPanel sousPanelDroitHautCentre = new JPanel(new BorderLayout(10, 30));
+        pannelDroitHaut.add(sousPanelDroitHautCentre, BorderLayout.CENTER);
         
-        nom = new JTextField(20);
-        toprightPan.add(nom);
-        rightPan.add(toprightPan,BorderLayout.NORTH);
+        sousPanelDroitHautCentre.add(new JLabel("Ecrivez le nom du joueurs:"), BorderLayout.WEST);
         
-        JPanel midrightPan = new JPanel(new BorderLayout());
-        midrightPan.add(new JLabel("Choisissez l'interface adaptée à son âge:"), BorderLayout.NORTH);
+        textFieldNom = new JTextField(20);
+        sousPanelDroitHautCentre.add(textFieldNom, BorderLayout.EAST);
         
-        // for adapting the appearancve of the board to the age
-     
+        // Sous panel haut bas
+        JPanel sousPanelDroitHautBas = new JPanel(new BorderLayout(10, 20));
+        pannelDroitHaut.add(sousPanelDroitHautBas, BorderLayout.SOUTH);
         
-        JLabel sldlabel=new JLabel();
+        JLabel labelInterfaceAdaptee = new JLabel("Choisissez l'interface "
+                                                  + "adaptée à son âge:");
+        sousPanelDroitHautBas.add(labelInterfaceAdaptee, BorderLayout.NORTH);
         
-        JSlider sld = new JSlider(0,3);
-        sld.setPaintLabels(true);
+        JSlider curseurAge = new JSlider(0,3);
+        curseurAge.setPaintLabels(true);
         
         Hashtable position = new Hashtable();
         position.put(0, new JLabel("Enfant"));
@@ -124,70 +120,73 @@ public class VueInscriptionJoueurs extends Observable{
         position.put(2, new JLabel("Adulte"));
         position.put(3, new JLabel("Senior"));
         
-        
-        sld.setLabelTable(position);
+        curseurAge.setLabelTable(position);
       
-        JPanel sldContainer = new JPanel();
-        sldContainer.add(sld);
+        JPanel panelCurseur = new JPanel();
+        panelCurseur.add(curseurAge);
         
-        midrightPan.add(sldContainer);
+        sousPanelDroitHautBas.add(curseurAge, BorderLayout.CENTER);
         
-        rightPan.add(midrightPan,BorderLayout.CENTER);
+        boutonAjouter = new JButton("Ajouter ce joueur");
+        boutonAjouter.setSize(80, 10);
+        sousPanelDroitHautBas.add(boutonAjouter, BorderLayout.SOUTH);
         
-        // for the buttons on the bottom right
-        JPanel downrightPan = new JPanel(new GridLayout(2,3,5,5));
-        rightPan.add(downrightPan, BorderLayout.SOUTH);
-        
-         ajouter=new JButton("Ajouter ce joueur");
+        // --------- Panel Bas -----------
+        JPanel downrightPan = new JPanel(new GridLayout(1,3,5,5));
+        pannelDroite.add(downrightPan, BorderLayout.SOUTH);
          
-         ajouter.addActionListener(new ActionListener() {
+        boutonReglesJeu = new JButton("Règles du jeu");
+        
+        boutonCommencer = new JButton("Commencer");
+        
+        downrightPan.add(new JPanel());
+        downrightPan.add(boutonReglesJeu);
+        downrightPan.add(boutonCommencer);
+        
+        // Création des actions:
+        boutonRetirer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 setChanged();
-                ArrayList <String> noms = new ArrayList();
-                noms.add(nom.getText());
-                MInscriptionJoueurs ins = new MInscriptionJoueurs(EAction.AJOUTER, noms);
-                notifyObservers(ins);
+                ArrayList<String> listeJoueursSelectionnes = new ArrayList(listeNomsJoueurs.getSelectedValuesList());
+                notifyObservers(new MInscriptionJoueurs(EAction.SUPPRIMER, listeJoueursSelectionnes));
                 clearChanged();
             }
          });
-         
-         rdj = new JButton("Règles du jeu");
-         rdj.addActionListener(new ActionListener() {
+        
+        boutonAjouter.addActionListener(new ActionListener() {
+           @Override
+           public void actionPerformed(ActionEvent arg0) {
+               setChanged();
+               ArrayList <String> noms = new ArrayList();
+               noms.add(textFieldNom.getText());
+               MInscriptionJoueurs ins = new MInscriptionJoueurs(EAction.AJOUTER, noms);
+               notifyObservers(ins);
+               clearChanged();
+            }
+        });
+        
+        boutonReglesJeu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 setChanged();
                 notifyObservers(new Message(EAction.REGLES_JEU));
                 clearChanged();
             }
-         });
-         
-   
-         
-         start=new JButton("Commencer");
-         start.addActionListener(new ActionListener() {
+        });
+        
+        boutonCommencer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 setChanged();
                 notifyObservers(new Message(EAction.CONTINUER));
                 clearChanged();
             }
-         });
-        
-        downrightPan.add(new JLabel());
-        downrightPan.add(new JLabel());
-        downrightPan.add(ajouter);
-        downrightPan.add(new JLabel());
-        downrightPan.add(rdj);
-        downrightPan.add(start);
-                
-        mainPanel.add(rightPan, BorderLayout.CENTER);
-        
-        window.add(mainPanel);
+        });
     }
     
     public void afficherFenetre(boolean aff) {
-        this.getWindow().setVisible(aff);
+        fenetre.setVisible(aff);
     }
         
     public void addJoueur(String nom) {
@@ -198,16 +197,11 @@ public class VueInscriptionJoueurs extends Observable{
         nomsListModel.removeElement(nom);
     }
 
-    private JPanel getCellule(int i) {
-        JPanel panelCellule = new JPanel();
-        return panelCellule ;
-    }
-
     /**
      * @return the window
      */
     public JFrame getWindow() {
-        return window;
+        return fenetre;
     }
     
 }
