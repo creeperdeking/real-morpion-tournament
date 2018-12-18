@@ -37,6 +37,7 @@ public class JeuMorpion implements Observer {
     
     private ArrayList<Joueur> joueurs;
     private Joueur joueurCourant;
+    private ArrayList<Joueur[]> matchs;
     
     private boolean retour_arriere_possible;
     private int ancienne_ligne, ancienne_colonne;
@@ -56,12 +57,18 @@ public class JeuMorpion implements Observer {
         vueReglesJeu.addObserver(this);
         vueInscriptionJoueurs.addObserver(this);
         
+        
+        
         joueurCourant = j2;
         prochainTour(); // Le joueur courant deviens j1
     }
     
+    public void genererMatchs() {
+        
+    }
+    
     public void lancerJeu() {
-        vueJeuMorpion.afficherFenetre(true);
+        vueInscriptionJoueurs.afficherFenetre(true);
     }
     
     public void prochainTour() {
@@ -104,15 +111,33 @@ public class JeuMorpion implements Observer {
                     switch (((MInscriptionJoueurs)arg1).getAction()) {
                         case AJOUTER:
                             String nomJoueur = ((MInscriptionJoueurs) arg1).getNomJoueurs().get(0);
-                            joueurs.add(new Joueur(nomJoueur));
+                            
+                            boolean existeDeja = false;
+                            for (Joueur j : joueurs) {
+                                if (j.getIdentifiant().equals(nomJoueur))
+                                    existeDeja = true;
+                            }
+                            
+                            if (existeDeja)
+                                JOptionPane.showMessageDialog(vueInscriptionJoueurs.getWindow(), "Deux joueurs ne peuvent pas avoir le même nom!");
+                            else {
+                                joueurs.add(new Joueur(nomJoueur));
+                                vueInscriptionJoueurs.addJoueur(nomJoueur);
+                            }
+                            break;
                         case SUPPRIMER:
-                            ArrayList<String> nomJoueurs =((MInscriptionJoueurs) arg1).getNomJoueurs();
+                            ArrayList<String> nomJoueurs = ((MInscriptionJoueurs) arg1).getNomJoueurs();
                             for (String nom : nomJoueurs) {
-                                for (Joueur j : joueurs) {
-                                    if (j.getIdentifiant().equals(nom))
+                                System.out.println(nom);
+                                ArrayList<Joueur> listeJ = new ArrayList(joueurs);
+                                for (Joueur j : listeJ) {
+                                    if (j.getIdentifiant().equals(nom)) {
                                         joueurs.remove(j);
+                                        vueInscriptionJoueurs.removeJoueur(nom);
+                                    }
                                 }
                             }
+                            break;
                     }
                 }
             }
@@ -143,8 +168,11 @@ public class JeuMorpion implements Observer {
                    switch(msg.getAction()){
                        case REGLES_JEU:
                            System.out.println("blablablabla");
+                           break;
                        case CONTINUER:
-                           
+                           vueJeuMorpion.afficherFenetre(true);
+                           vueInscriptionJoueurs.afficherFenetre(false);
+                           break;
                    
                    }
                 }

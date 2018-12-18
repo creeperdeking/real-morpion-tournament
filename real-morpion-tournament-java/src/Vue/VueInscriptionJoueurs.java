@@ -7,33 +7,27 @@ package Vue;
 
 import Utilitaires.Enums.EAction;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Hashtable;
 import java.util.Observable;
-import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
 import Utilitaires.Messages.MInscriptionJoueurs;
 import Utilitaires.Messages.Message;
 import java.util.ArrayList;
-import org.w3c.dom.NameList;
+import java.util.Hashtable;
+
 /**
  *
  * @author grosa
@@ -46,11 +40,15 @@ public class VueInscriptionJoueurs extends Observable{
     private JButton ajouter;
     private JButton start;
     private JTextField nom;
+    private JList nomsListe;
+    private DefaultListModel nomsListModel;
     
+    private ArrayList<String> listeJoueursSelectionnes;
     
     
     public VueInscriptionJoueurs(){
-    
+        listeJoueursSelectionnes = new ArrayList();
+        
         window = new JFrame();
         window.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
         // Définit la taille de la fenêtre en pixels
@@ -69,42 +67,21 @@ public class VueInscriptionJoueurs extends Observable{
         leftPan.add(topleftPan, BorderLayout.NORTH);
         
         //list of name plates in the left
-        DefaultListModel namelist = new DefaultListModel();
-        JList names = new JList(namelist);
+        nomsListModel = new DefaultListModel();
+        nomsListe = new JList(nomsListModel);
         
-        
-        
-        namelist.addElement("dai2");
-        namelist.addElement("dais");
-        namelist.addElement("dai3");
-        namelist.addElement("daih");
-        namelist.addElement("daih");
-        namelist.addElement("daih");
-        namelist.addElement("daih");
-        namelist.addElement("daih");
-        namelist.addElement("daih");
-        namelist.addElement("daih");
-        namelist.addElement("daih");
-        
-        
-        JScrollPane midleftPan = new JScrollPane(names);
-        
-       
-        
+        JScrollPane midleftPan = new JScrollPane(nomsListe);
       
         leftPan.add(midleftPan, BorderLayout.CENTER);
         
         retirer = new JButton("Retirer");
          
-        names.getSelectedValuesList();
-         
         retirer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 setChanged();
-                ArrayList <String> nomliste=new ArrayList<>();
-                
-                notifyObservers();
+                listeJoueursSelectionnes = new ArrayList(nomsListe.getSelectedValuesList());
+                notifyObservers(new MInscriptionJoueurs(EAction.SUPPRIMER, listeJoueursSelectionnes));
                 clearChanged();
             }
          });
@@ -126,7 +103,7 @@ public class VueInscriptionJoueurs extends Observable{
         toprightPan.add(new JLabel(""));
         toprightPan.add(new JLabel("Ecrivez le nom du joueurs:"));
         
-        nom= new JTextField(20);
+        nom = new JTextField(20);
         toprightPan.add(nom);
         rightPan.add(toprightPan,BorderLayout.NORTH);
         
@@ -157,9 +134,6 @@ public class VueInscriptionJoueurs extends Observable{
         
         rightPan.add(midrightPan,BorderLayout.CENTER);
         
-        
-        
-        
         // for the buttons on the bottom right
         JPanel downrightPan = new JPanel(new GridLayout(2,3,5,5));
         rightPan.add(downrightPan, BorderLayout.SOUTH);
@@ -170,15 +144,15 @@ public class VueInscriptionJoueurs extends Observable{
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 setChanged();
-                ArrayList <String> noms=new ArrayList<>();
+                ArrayList <String> noms = new ArrayList();
                 noms.add(nom.getText());
-                MInscriptionJoueurs ins=new MInscriptionJoueurs(EAction.AJOUTER, noms);
+                MInscriptionJoueurs ins = new MInscriptionJoueurs(EAction.AJOUTER, noms);
                 notifyObservers(ins);
                 clearChanged();
             }
          });
          
-         rdj=new JButton("Règles du jeu");
+         rdj = new JButton("Règles du jeu");
          rdj.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
@@ -212,8 +186,16 @@ public class VueInscriptionJoueurs extends Observable{
         window.add(mainPanel);
     }
     
-        public void afficher() {
-        this.window.setVisible(true);
+    public void afficherFenetre(boolean aff) {
+        this.getWindow().setVisible(aff);
+    }
+        
+    public void addJoueur(String nom) {
+        nomsListModel.addElement(nom);
+    }
+    
+    public void removeJoueur(String nom) {
+        nomsListModel.removeElement(nom);
     }
 
     private JPanel getCellule(int i) {
@@ -221,9 +203,11 @@ public class VueInscriptionJoueurs extends Observable{
         return panelCellule ;
     }
 
-    public static void main(String [] args) {
-        VueInscriptionJoueurs myihm = new VueInscriptionJoueurs();
-        myihm.afficher();
-   }   
+    /**
+     * @return the window
+     */
+    public JFrame getWindow() {
+        return window;
+    }
     
 }

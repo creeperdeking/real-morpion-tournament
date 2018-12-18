@@ -17,15 +17,11 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
 
-import java.util.Observer;
 import java.util.Observable;
 import javax.swing.BorderFactory;
 import javax.swing.SwingConstants;
@@ -45,7 +41,9 @@ public class VueJeuMorpion extends Observable {
     private MyButton bCases[][];
     
     public VueJeuMorpion() {
-        
+        fenetre.setResizable(false);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        fenetre.setLocation(dim.width/2-fenetre.getSize().width/2, dim.height/2-fenetre.getSize().height/2);
         bCases = new MyButton[3][3];
         
         fenetre = new JFrame();
