@@ -17,7 +17,7 @@ public class RealMorpionTournament {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        JeuMorpion jeu = new JeuMorpion(new Joueur("Dai"), new Joueur("Alexis"));
+        JeuMorpion jeu = new JeuMorpion();
         jeu.lancerJeu();
     }
     

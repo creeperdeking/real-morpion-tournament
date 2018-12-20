@@ -22,6 +22,7 @@ import Vue.VueJeuMorpion;
 import Vue.VueClassement;
 import Vue.VueConfrontations;
 import java.util.ArrayList;
+import java.util.Collections;
 import javax.swing.JOptionPane;
         
 /**
@@ -30,159 +31,215 @@ import javax.swing.JOptionPane;
  */
 
 public class JeuMorpion implements Observer {
-    private VueJeuMorpion vueJeuMorpion;
-    private VueReglesJeu  vueReglesJeu;
-    private VueInscriptionJoueurs vueInscriptionJoueurs;
-    private Grille grille;
+    private VueJeuMorpion         vueJeuMorpion = new VueJeuMorpion();
+    private VueReglesJeu          vueReglesJeu = new VueReglesJeu();
+    private VueInscriptionJoueurs vueInscriptionJoueurs = new VueInscriptionJoueurs();
+    private Grille grille = new Grille();
     
-    private ArrayList<Joueur> joueurs;
-    private Joueur joueurCourant;
-    private ArrayList<Joueur[]> matchs;
+    private ArrayList<Joueur> joueurs = new ArrayList();
+    private Joueur[] adversairesCourant = new Joueur[2];
+    private int numeroJoueurCourant;
+    private ArrayList<Joueur[]> matchs = new ArrayList();
+    private int indiceMatchActuel = -1;
     
-    private boolean retour_arriere_possible;
+    private boolean retour_arriere_possible = false;
     private int ancienne_ligne, ancienne_colonne;
     
-    public JeuMorpion(Joueur j1, Joueur j2) {
-        grille = new Grille();
-        joueurs = new ArrayList();
-        
-        joueurs.add(j1);
-        joueurs.add(j2);
-        
-        vueJeuMorpion = new VueJeuMorpion();
-        vueReglesJeu = new VueReglesJeu();
-        vueInscriptionJoueurs = new VueInscriptionJoueurs();
-        
+    public JeuMorpion() {
         vueJeuMorpion.addObserver(this);
         vueReglesJeu.addObserver(this);
         vueInscriptionJoueurs.addObserver(this);
-        
-        
-        
-        joueurCourant = j2;
-        prochainTour(); // Le joueur courant deviens j1
-    }
-    
-    public void genererMatchs() {
-        
     }
     
     public void lancerJeu() {
         vueInscriptionJoueurs.afficherFenetre(true);
     }
     
+    private void genererMatchs() {
+        for (Joueur joueur : joueurs) {
+            for (Joueur adversaire : joueurs) {
+                if (adversaire == joueur)
+                    continue;
+                Joueur paire1[] = {joueur, adversaire};
+                Joueur paire2[] = {adversaire, joueur};
+                matchs.add(paire1);
+                matchs.add(paire2);
+            }
+            Collections.shuffle(matchs);
+        }
+    }
+    
+    private void prochainMatch() {
+        indiceMatchActuel ++;
+        vueJeuMorpion.reinitialiserGrille();
+        if (indiceMatchActuel < matchs.size()) {
+            adversairesCourant = matchs.get(indiceMatchActuel);
+
+            numeroJoueurCourant = 1;
+            prochainTour(); // Le joueur courant deviens j1
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Fin du tournoi!", "Information", JOptionPane.OK_OPTION);
+        }
+    }
+    
     public void prochainTour() {
+        retour_arriere_possible = true;
+        
         EEtatCase gagne = grille.chercherSiEtatFinal();
         if (gagne != null) {
-            switch (gagne) {
-                case VIDE:
-                    JOptionPane.showMessageDialog(null, "Egalité", "Information", JOptionPane.OK_OPTION);
-                    break;
-                case CROIX:
-                    JOptionPane.showMessageDialog(null, "Croix gagne!", "Information", JOptionPane.OK_OPTION);
-                    break;
-                case ROND:
-                    JOptionPane.showMessageDialog(null, "Rond gagne!", "Information", JOptionPane.OK_OPTION);
-                    break;
-                default:
-                    break;
+            if (gagne == EEtatCase.VIDE) {
+                JOptionPane.showMessageDialog(null, "Egalité", "Information", JOptionPane.OK_OPTION);
+                adversairesCourant[0].addScore(1);
+                adversairesCourant[1].addScore(1);
             }
+            else {
+                Joueur gagnant = adversairesCourant[gagne.getNumero()];
+                JOptionPane.showMessageDialog(null, gagnant.getIdentifiant()+" gagne ce match!", "Information", JOptionPane.OK_OPTION);
+                gagnant.addScore(3);
+            }
+            prochainMatch();
         }
-        if (joueurCourant == joueurs.get(0))
-            joueurCourant = joueurs.get(1);
         else
-            joueurCourant = joueurs.get(0);
+            joueurSuivant();
         
-        vueJeuMorpion.setNomJoueurCourant(joueurCourant.getIdentifiant());
-        int numeroJoueurCourant = joueurs.indexOf(joueurCourant);
+        actualiserAffichageJoueur();
+    }
+    
+    private void joueurSuivant() {
+        if (numeroJoueurCourant == 0)
+            numeroJoueurCourant = 1;
+        else
+            numeroJoueurCourant = 0;
+    }
+        
+    private void annulerTourPrecedent() {
+        retour_arriere_possible = false;
+        
+        vueJeuMorpion.setEtatCase(EEtatCase.VIDE, ancienne_ligne, ancienne_colonne);
+        grille.setEtatCase(EEtatCase.VIDE, ancienne_ligne, ancienne_colonne);
+        
+        joueurSuivant();
+        
+        actualiserAffichageJoueur();
+    }
+    
+    private void actualiserAffichageJoueur() {
+        String nomJoueurCourant = adversairesCourant[numeroJoueurCourant].getIdentifiant();
+        vueJeuMorpion.setNomJoueurCourant(nomJoueurCourant);
+        
         if (numeroJoueurCourant == 0)
             vueJeuMorpion.setSymboleJoueurCourant(EEtatCase.CROIX);
         else if(numeroJoueurCourant == 1)
             vueJeuMorpion.setSymboleJoueurCourant(EEtatCase.ROND);
     }
     
+    private boolean ajouterJoueur(String nomJoueur) {
+        boolean existeDeja = false;
+        for (Joueur j : joueurs) {
+            if (j.getIdentifiant().equals(nomJoueur))
+                existeDeja = true;
+        }
+                            
+        if (!existeDeja) {
+            joueurs.add(new Joueur(nomJoueur));
+            vueInscriptionJoueurs.addJoueur(nomJoueur);
+        }
+        
+        return !existeDeja;
+    }
+    
+    private void supprimerJoueurs(ArrayList<String> nomJoueurs) {
+        for (String nom : nomJoueurs) {
+            System.out.println(nom);
+            ArrayList<Joueur> listeJ = new ArrayList(joueurs);
+            for (Joueur j : listeJ) {
+                if (j.getIdentifiant().equals(nom)) {
+                    joueurs.remove(j);
+                    vueInscriptionJoueurs.removeJoueur(nom);
+                }
+            }
+        }
+    }
+    
+    private boolean gererClicCase(int ligne, int colonne) {
+        boolean caseVide = grille.getEtatCase(ligne, colonne) == EEtatCase.VIDE;
+        
+        if (caseVide) {
+            EEtatCase symboleJoueur = EEtatCase.getCase(numeroJoueurCourant);
+            if (numeroJoueurCourant == 1)
+                symboleJoueur = EEtatCase.ROND;
+            
+            grille.setEtatCase(symboleJoueur, ligne, colonne);
+            vueJeuMorpion.setEtatCase(symboleJoueur, ligne, colonne);
+            
+            ancienne_ligne = ligne;
+            ancienne_colonne = colonne;
+            prochainTour();
+        }
+        return caseVide;
+    }
+    
+    private void commencerTournoi() {
+        genererMatchs();
+        prochainMatch();
+        
+        vueJeuMorpion.afficherFenetre(true);
+        vueInscriptionJoueurs.afficherFenetre(false);
+    }
+    
+    private void lancerReglesJeu() {
+        
+    }
     
     @Override
     public void update(Observable arg0, Object arg1) {
-        
         if(arg1 instanceof Message) {
             if(arg1 instanceof MInscriptionJoueurs) {
-                if (arg0 instanceof VueInscriptionJoueurs) {
-                    switch (((MInscriptionJoueurs)arg1).getAction()) {
-                        case AJOUTER:
-                            String nomJoueur = ((MInscriptionJoueurs) arg1).getNomJoueurs().get(0);
-                            
-                            boolean existeDeja = false;
-                            for (Joueur j : joueurs) {
-                                if (j.getIdentifiant().equals(nomJoueur))
-                                    existeDeja = true;
-                            }
-                            
-                            if (existeDeja)
-                                JOptionPane.showMessageDialog(vueInscriptionJoueurs.getWindow(), "Deux joueurs ne peuvent pas avoir le même nom!");
-                            else {
-                                joueurs.add(new Joueur(nomJoueur));
-                                vueInscriptionJoueurs.addJoueur(nomJoueur);
-                            }
-                            break;
-                        case SUPPRIMER:
-                            ArrayList<String> nomJoueurs = ((MInscriptionJoueurs) arg1).getNomJoueurs();
-                            for (String nom : nomJoueurs) {
-                                System.out.println(nom);
-                                ArrayList<Joueur> listeJ = new ArrayList(joueurs);
-                                for (Joueur j : listeJ) {
-                                    if (j.getIdentifiant().equals(nom)) {
-                                        joueurs.remove(j);
-                                        vueInscriptionJoueurs.removeJoueur(nom);
-                                    }
-                                }
-                            }
-                            break;
-                    }
+                EAction action = ((MInscriptionJoueurs)arg1).getAction();
+                
+                switch (action) {
+                    case AJOUTER:
+                        String nomJoueur = ((MInscriptionJoueurs) arg1).getNomJoueurs().get(0);
+                        if (!ajouterJoueur(nomJoueur))
+                            JOptionPane.showMessageDialog(vueInscriptionJoueurs.getWindow(), "Deux joueurs ne peuvent pas avoir le même nom!");
+                        break;
+                    case SUPPRIMER:
+                        ArrayList<String> nomJoueurs = ((MInscriptionJoueurs) arg1).getNomJoueurs();
+                        supprimerJoueurs(nomJoueurs);
+                        break;
                 }
             }
             else if(arg1 instanceof MClicCase) {
-                
-                if (arg0 instanceof VueJeuMorpion) {
-                    MClicCase mes = (MClicCase)arg1;
-                    int numeroJoueurCourant = joueurs.indexOf(joueurCourant);
-                    if (grille.getEtatCase(mes.getLigne(), mes.getColonne()) == EEtatCase.VIDE) {
-                        
-                        if (numeroJoueurCourant == 0) {
-                            grille.setEtatCase(EEtatCase.CROIX, mes.getLigne(), mes.getColonne());
-                            vueJeuMorpion.setEtatCase(EEtatCase.CROIX, mes.getLigne(), mes.getColonne());
-                        }
-                        else if(numeroJoueurCourant == 1) {
-                            grille.setEtatCase(EEtatCase.ROND, mes.getLigne(), mes.getColonne());
-                            vueJeuMorpion.setEtatCase(EEtatCase.ROND, mes.getLigne(), mes.getColonne());
-                        }
-                        ancienne_ligne = mes.getLigne();
-                        ancienne_colonne = mes.getColonne();
-                        prochainTour();
-                    }
-                }
+                MClicCase mes = (MClicCase)arg1;
+                gererClicCase(mes.getLigne(), mes.getColonne());
             }
             else { // Si il s'agit d'un message normal
                 Message msg = (Message)arg1;
                 if (arg0 instanceof VueInscriptionJoueurs) {
-                   switch(msg.getAction()){
-                       case REGLES_JEU:
-                           System.out.println("blablablabla");
-                           break;
-                       case CONTINUER:
-                           vueJeuMorpion.afficherFenetre(true);
-                           vueInscriptionJoueurs.afficherFenetre(false);
-                           break;
-                   
+                    switch(msg.getAction()){
+                        case REGLES_JEU:
+                            lancerReglesJeu();
+                            break;
+                        case CONTINUER:
+                            if (joueurs.size() < 2)
+                               JOptionPane.showMessageDialog(null, "Ajoutez au moins deux joueurs à votre tournoi", "Information", JOptionPane.OK_OPTION);
+                            else
+                               commencerTournoi();
+                            break;
                    }
                 }
                 else if (arg0 instanceof VueReglesJeu) {
                     
                 }
                 else if (arg0 instanceof VueJeuMorpion) {
-                    if (msg.getAction() == EAction.RETOUR) {
-                        if (ancienne_ligne >= 0)
-                            vueJeuMorpion.setEtatCase(EEtatCase.VIDE, ancienne_ligne, ancienne_colonne);
+                    switch(msg.getAction()) {
+                        case RETOUR:
+                            if (retour_arriere_possible)
+                                annulerTourPrecedent();
+                            break;
+                        case REGLES_JEU:
+                            lancerReglesJeu();
                     }
                 }
                 else if (arg0 instanceof VueClassement) {

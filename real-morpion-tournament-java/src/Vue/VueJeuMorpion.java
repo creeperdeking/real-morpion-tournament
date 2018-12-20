@@ -41,16 +41,15 @@ public class VueJeuMorpion extends Observable {
     private MyButton bCases[][];
     
     public VueJeuMorpion() {
-        fenetre = new JFrame();
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        fenetre.setResizable(false);
-        fenetre.setLocation(dim.width/2-fenetre.getSize().width/2, dim.height/2-fenetre.getSize().height/2);
         bCases = new MyButton[3][3];
         
         fenetre = new JFrame();
         fenetre.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
         // Définit la taille de la fenêtre en pixels
         fenetre.setSize(defaultWidth, (int)(defaultWidth*1.4)-30); //Ratio 1:1.618
+        fenetre.setResizable(false);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        fenetre.setLocation(dim.width/2-fenetre.getSize().width/2, dim.height/2-fenetre.getSize().height/2);
         fenetre.setTitle("Grille de jeu");
         
         JPanel agencementFenetre = new JPanel(new BorderLayout(0, 10));
@@ -121,6 +120,8 @@ public class VueJeuMorpion extends Observable {
         agencementFenetre.add(pannelGrille, BorderLayout.CENTER);
         agencementFenetre.add(pannelBoutons, BorderLayout.SOUTH);
         
+        
+        
         fenetre.add(agencementFenetre);
     }
     
@@ -151,6 +152,14 @@ public class VueJeuMorpion extends Observable {
             case ROND:
                 iconeSymboleActuel.setText("O");
                 break;
+        }
+    }
+    
+    public void reinitialiserGrille() {
+        for (int ligne = 2; ligne >= 0; ligne--) {
+            for (int colonne = 0; colonne < 3; colonne++) {
+                bCases[ligne][colonne].setText("_");
+            }
         }
     }
     

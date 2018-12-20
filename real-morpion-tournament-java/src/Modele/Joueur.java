@@ -15,12 +15,14 @@ public class Joueur {
     private String identifiant;
     private ECategorieAge categorieAge;
     
-    private int nbPoints;
+    private int nbPoints = 0;
     
     public Joueur(String identifiant) {
         this.identifiant = identifiant;
-        
-        nbPoints = 0;
+    }
+    
+    public void addScore(int points) {
+        nbPoints += points;
     }
 
     /**

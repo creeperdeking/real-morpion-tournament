@@ -183,14 +183,19 @@ public class VueInscriptionJoueurs extends Observable{
                 clearChanged();
             }
         });
+        
+        
     }
     
     public void afficherFenetre(boolean aff) {
         fenetre.setVisible(aff);
+        textFieldNom.requestFocusInWindow();
     }
         
     public void addJoueur(String nom) {
         nomsListModel.addElement(nom);
+        textFieldNom.setText("");
+        textFieldNom.requestFocusInWindow();
     }
     
     public void removeJoueur(String nom) {
