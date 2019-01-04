@@ -12,26 +12,26 @@ import Utilitaires.Enums.EAction;
  * @author creeps
  */
 public class MBouge extends Message {
-    private int delta_x;
-    private int delta_y;
+    private int deltaX;
+    private int deltaY;
     
-    public MBouge(EAction action, int delta_x, int delta_y) {
+    public MBouge(EAction action, int deltaX, int deltaY) {
         super(action);
-        this.delta_x = delta_x;
-        this.delta_y = delta_y;
+        this.deltaX = deltaX;
+        this.deltaY = deltaY;
     }
 
     /**
      * @return the delta_x
      */
-    public int getDelta_x() {
-        return delta_x;
+    public int getDeltaX() {
+        return deltaX;
     }
 
     /**
      * @return the delta_y
      */
-    public int getDelta_y() {
-        return delta_y;
+    public int getDeltaY() {
+        return deltaY;
     }
 }

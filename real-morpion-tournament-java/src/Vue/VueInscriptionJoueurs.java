@@ -183,8 +183,6 @@ public class VueInscriptionJoueurs extends Observable{
                 clearChanged();
             }
         });
-        
-        
     }
     
     public void afficherFenetre(boolean aff) {

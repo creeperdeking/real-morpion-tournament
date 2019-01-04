@@ -9,6 +9,7 @@ import Modele.Grille;
 import Modele.Joueur;
 import Utilitaires.Enums.EAction;
 import Utilitaires.Enums.EEtatCase;
+import Utilitaires.Messages.MBouge;
 import Utilitaires.Messages.MClicCase;
 import Utilitaires.Messages.MInscriptionJoueurs;
 import Utilitaires.Messages.Message;
@@ -75,8 +76,6 @@ public class JeuMorpion implements Observer {
             }
             Collections.shuffle(matchs);
         }
-        
-        
     }
     
     private void prochainMatch() {
@@ -197,6 +196,7 @@ public class JeuMorpion implements Observer {
         vueInscriptionJoueurs.afficherFenetre(false);
         genererMatchs();
         
+
         HashMap<String,Integer> ListeNomScore=new HashMap<>();
         
         
@@ -213,6 +213,7 @@ public class JeuMorpion implements Observer {
         Point positionVueJeu = vueJeuMorpion.getPosition();
         vueConfrontation.setPosition(positionVueJeu.x + vueJeuMorpion.getDefaultWidth(), positionVueJeu.y);
         vueConfrontation.afficherFenetre(true);
+        vueConfrontation.addObserver(this);
         
         vueClassement.setPosition(positionVueJeu.x - vueClassement.getDefaultWidth(), positionVueJeu.y);
         vueClassement.afficherFenetre(true);
@@ -246,6 +247,12 @@ public class JeuMorpion implements Observer {
             else if(arg1 instanceof MClicCase) {
                 MClicCase mes = (MClicCase)arg1;
                 gererClicCase(mes.getLigne(), mes.getColonne());
+            }
+            else if(arg1 instanceof MBouge) {
+                MBouge mes = (MBouge)arg1;
+                Point posVueConfrontation = vueConfrontation.getPosition();
+                
+                vueConfrontation.setPosition(posVueConfrontation.x+mes.getDeltaX(), posVueConfrontation.y+mes.getDeltaY());
             }
             else { // Si il s'agit d'un message normal
                 Message msg = (Message)arg1;

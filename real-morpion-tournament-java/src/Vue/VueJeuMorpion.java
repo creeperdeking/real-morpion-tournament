@@ -34,7 +34,7 @@ import javax.swing.SwingConstants;
  *
  * @author grosa
  */
-public class VueJeuMorpion extends Observable implements ComponentListener {
+public class VueJeuMorpion extends Observable implements ComponentListener{
     
     private JFrame fenetre;
     private final int defaultWidth = 400;
@@ -56,6 +56,7 @@ public class VueJeuMorpion extends Observable implements ComponentListener {
         fenetre.setResizable(true);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         fenetre.setLocation(dim.width/2-fenetre.getSize().width/2, dim.height/2-fenetre.getSize().height/2);
+        position = fenetre.getLocation();
         fenetre.setTitle("Grille de jeu");
         
         JPanel agencementFenetre = new JPanel(new BorderLayout(0, 10));
@@ -127,13 +128,17 @@ public class VueJeuMorpion extends Observable implements ComponentListener {
         agencementFenetre.add(pannelBoutons, BorderLayout.SOUTH);
         
         
-        
         fenetre.add(agencementFenetre);
+        
+        fenetre.addComponentListener(this);
     }
     
     @Override
     public void componentMoved(ComponentEvent arg0) {
+        setChanged();
         notifyObservers(new MBouge(EAction.BOUGE, getPosition().x - position.x, getPosition().y - position.y));
+        position = fenetre.getLocation();
+        clearChanged();
     }
     
     @Override
