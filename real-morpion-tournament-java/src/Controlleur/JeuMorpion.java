@@ -24,6 +24,7 @@ import Vue.VueConfrontations;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import javax.swing.JOptionPane;
         
 /**
@@ -36,6 +37,7 @@ public class JeuMorpion implements Observer {
     private VueReglesJeu          vueReglesJeu = new VueReglesJeu();
     private VueInscriptionJoueurs vueInscriptionJoueurs = new VueInscriptionJoueurs();
     private VueConfrontations vueConfrontation;
+    private VueClassement vueClassement;
     private Grille grille = new Grille();
     
     private ArrayList<Joueur> joueurs = new ArrayList();
@@ -191,23 +193,31 @@ public class JeuMorpion implements Observer {
     }
     
     private void commencerTournoi() {
+        
         vueInscriptionJoueurs.afficherFenetre(false);
         genererMatchs();
         
+        HashMap<String,Integer> ListeNomScore=new HashMap<>();
         
         
+        ArrayList<String> noms=new ArrayList<>();
         ArrayList<String[]> confrontations = new ArrayList();
         for (Joueur joueurs[] : matchs) {
             String conf[] = {joueurs[0].getIdentifiant(), joueurs[1].getIdentifiant()};
             confrontations.add(conf);
         }
         vueConfrontation = new VueConfrontations(confrontations);
+        
+        vueClassement=new VueClassement(noms);
+        
         Point positionVueJeu = vueJeuMorpion.getPosition();
         vueConfrontation.setPosition(positionVueJeu.x + vueJeuMorpion.getDefaultWidth(), positionVueJeu.y);
         vueConfrontation.afficherFenetre(true);
         
-        vueJeuMorpion.afficherFenetre(true);
+        vueClassement.setPosition(positionVueJeu.x - vueClassement.getDefaultWidth(), positionVueJeu.y);
+        vueClassement.afficherFenetre(true);
         
+        vueJeuMorpion.afficherFenetre(true);
         prochainMatch();
     }
     

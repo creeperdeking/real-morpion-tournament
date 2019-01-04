@@ -5,12 +5,187 @@
  */
 package Vue;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
+import java.awt.event.ActionListener;
+import java.security.KeyStore;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Observable;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.MatteBorder;
 
 /**
  *
  * @author grosa
  */
 public class VueClassement extends Observable {
+    private HashMap<String,Integer> listeNomScore=new HashMap<>();
+
+    private final int defaultWidth=400;
+    private final JFrame fenetre;
+    private ArrayList<JLabel> labelDeNoms;
+    private ArrayList<JLabel> labelDeScores;
+    private JLabel labelDeNom;
+    private JLabel labelDeScore;
     
+    public VueClassement(ArrayList<String> noms){
+        
+        fenetre = new JFrame();
+        fenetre.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
+        // Définit la taille de la fenêtre en pixels
+        fenetre.setSize(defaultWidth, (int)(defaultWidth*1.4)-30);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        fenetre.setLocation(dim.width/2-fenetre.getSize().width/2, dim.height/2-fenetre.getSize().height/2);
+       
+        JPanel mainPanel=new JPanel();
+         //=====================partie gauche ou il y a la liste de noms============================
+        JPanel panelCentre=new JPanel();
+        
+        
+        
+        for(String  nom : noms){
+            listeNomScore.put(nom,0);
+        }
+       
+        
+        //liste de nom
+        JPanel panelListeNom=new JPanel(new GridLayout(10,1));
+        
+        labelDeNoms=new ArrayList<>();
+        labelDeNom=new JLabel();
+        
+        for (int i=1;i<=10;i++){
+            labelDeNoms.add(labelDeNom);
+            panelListeNom.add(labelDeNom);
+            
+        
+        }
+        this.actualiserListe();
+        
+        JLabel joueur=new JLabel("Joueur");
+        joueur.setBorder(new MatteBorder(0, 0,1, 0, Color.GRAY));
+        
+        
+        panelCentre.add(joueur,BorderLayout.NORTH);
+        panelCentre.add(panelListeNom,BorderLayout.CENTER);
+        panelCentre.setPreferredSize(new Dimension(220,660));
+       
+        panelCentre.setBorder(new MatteBorder(0,0,0 , 1, Color.GRAY));
+        
+        
+        
+        
+        
+        
+        mainPanel.add(panelCentre,BorderLayout.CENTER);
+        
+        //=========================partie droit ou il y a la liste de scores===========================
+        JPanel panelEast=new JPanel();
+        JLabel scores=new JLabel("Score");
+        scores.setBorder(new MatteBorder(0, 0, 1, 0, Color.GRAY));
+        
+        panelEast.add(scores,BorderLayout.NORTH);
+        
+        
+        //liste de score
+        JPanel panelListeScore=new JPanel(new GridLayout(10,1));
+        
+        labelDeScores=new ArrayList<>();
+        labelDeScore=new JLabel();
+        for (int i=1;i<=10;i++){
+            panelListeScore.add(labelDeScore);
+        
+        }
+        
+        
+        
+        
+       
+        panelEast.add(panelListeScore,BorderLayout.CENTER);
+        panelEast.setPreferredSize(new Dimension(110,660));
+        
+        mainPanel.add(panelEast,BorderLayout.EAST);
+        
+
+        
+        
+        
+        
+        
+        
+        fenetre.add(mainPanel);
+        
+        
+        
+     }
+    public void setScoreJouer(String nom,int socre){
+        listeNomScore=new HashMap<String,Integer>();
+        listeNomScore.put(nom, socre);
+       
+        List<Map.Entry<String, Integer>> infoIds = new ArrayList<Map.Entry<String, Integer>>(listeNomScore.entrySet());
+        //==============avant trié===================
+        for(int i=0;i<infoIds.size();i++){
+            String id=infoIds.get(i).toString();
+            
+        }
+        
+        //=============trieé par le score=========================
+       Collections.sort(infoIds, new Comparator<Map.Entry<String, Integer>>() {   
+             public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {      
+             return (o2.getValue() - o1.getValue()); 
+        //return (o1.getKey()).toString().compareTo(o2.getKey());
+          }
+        }); 
+       //=================apré trié par le score========================
+            for(int i=0;i<infoIds.size();i++){
+                String id=infoIds.get(i).toString();
+            
+            }
+       
+    }
+    
+    public void actualiserListe(){
+        int cptr = 0;
+        for (String nom : listeNomScore.keySet()){
+            JLabel labelNom = labelDeNoms.get(cptr);
+            labelNom.setText(nom);
+            JLabel labelScore=labelDeScores.get(cptr);
+            labelScore.setText(listeNomScore.get(nom).toString());
+            cptr ++;
+        }
+    }
+    
+    
+    
+    public void setPosition(int x, int y) {
+        fenetre.setLocation(x, y);
+    }
+    
+    public int getDefaultWidth() {
+        return defaultWidth;
+    }    
+    
+    
+    public void afficherFenetre(boolean aff) {
+        fenetre.setVisible(aff);
+    }
+
+    private JPanel getCellule(int i) {
+        JPanel panelCellule = new JPanel();
+        return panelCellule ;
+    }
+    
+
+
 }
