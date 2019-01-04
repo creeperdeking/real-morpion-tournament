@@ -5,42 +5,20 @@
  */
 package Vue;
 
-import java.util.Observable;
-
-import Utilitaires.Enums.EAction;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Observable;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JList;
 import javax.swing.JScrollPane;
-import javax.swing.JSlider;
-import Utilitaires.Messages.MInscriptionJoueurs;
-import Utilitaires.Messages.Message;
-import java.awt.Color;
 import java.awt.Image;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
+import java.awt.Point;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
-import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JScrollBar;
-import javax.swing.border.MatteBorder;
 
 /**
  *
@@ -118,6 +96,10 @@ public class VueConfrontations extends Observable {
     
     public void setPosition(int x, int y) {
         fenetre.setLocation(x, y);
+    }
+    
+    public Point getPosition() {
+        return fenetre.getLocation();
     }
     
     public void afficherFenetre(boolean aff) {
