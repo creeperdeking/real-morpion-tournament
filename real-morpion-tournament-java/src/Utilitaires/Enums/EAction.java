@@ -15,5 +15,6 @@ public enum EAction {
     CONTINUER,
     REGLES_JEU,
     RETOUR,
-    CLIC_CASE;
+    CLIC_CASE,
+    BOUGE;
 }

@@ -21,6 +21,7 @@ import Vue.VueReglesJeu;
 import Vue.VueJeuMorpion;
 import Vue.VueClassement;
 import Vue.VueConfrontations;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.JOptionPane;
@@ -34,6 +35,7 @@ public class JeuMorpion implements Observer {
     private VueJeuMorpion         vueJeuMorpion = new VueJeuMorpion();
     private VueReglesJeu          vueReglesJeu = new VueReglesJeu();
     private VueInscriptionJoueurs vueInscriptionJoueurs = new VueInscriptionJoueurs();
+    private VueConfrontations vueConfrontation;
     private Grille grille = new Grille();
     
     private ArrayList<Joueur> joueurs = new ArrayList();
@@ -52,6 +54,10 @@ public class JeuMorpion implements Observer {
     }
     
     public void lancerJeu() {
+        ajouterJoueur("A");
+        ajouterJoueur("B");
+        ajouterJoueur("C");
+        ajouterJoueur("D");
         vueInscriptionJoueurs.afficherFenetre(true);
     }
     
@@ -67,16 +73,20 @@ public class JeuMorpion implements Observer {
             }
             Collections.shuffle(matchs);
         }
+        
+        
     }
     
     private void prochainMatch() {
         indiceMatchActuel ++;
+        grille.reinitialiserGrille();
         vueJeuMorpion.reinitialiserGrille();
         if (indiceMatchActuel < matchs.size()) {
             adversairesCourant = matchs.get(indiceMatchActuel);
 
             numeroJoueurCourant = 1;
             prochainTour(); // Le joueur courant deviens j1
+            vueConfrontation.prochainMatch();
         }
         else {
             JOptionPane.showMessageDialog(null, "Fin du tournoi!", "Information", JOptionPane.OK_OPTION);
@@ -181,11 +191,24 @@ public class JeuMorpion implements Observer {
     }
     
     private void commencerTournoi() {
+        vueInscriptionJoueurs.afficherFenetre(false);
         genererMatchs();
-        prochainMatch();
+        
+        
+        
+        ArrayList<String[]> confrontations = new ArrayList();
+        for (Joueur joueurs[] : matchs) {
+            String conf[] = {joueurs[0].getIdentifiant(), joueurs[1].getIdentifiant()};
+            confrontations.add(conf);
+        }
+        vueConfrontation = new VueConfrontations(confrontations);
+        Point positionVueJeu = vueJeuMorpion.getPosition();
+        vueConfrontation.setPosition(positionVueJeu.x + vueJeuMorpion.getDefaultWidth(), positionVueJeu.y);
+        vueConfrontation.afficherFenetre(true);
         
         vueJeuMorpion.afficherFenetre(true);
-        vueInscriptionJoueurs.afficherFenetre(false);
+        
+        prochainMatch();
     }
     
     private void lancerReglesJeu() {

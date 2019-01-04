@@ -17,7 +17,7 @@ public class Grille {
     
     public Grille() {
         cases = new EEtatCase[3][3];
-        effacerCases();
+        reinitialiserGrille();
     }
     
     public Grille(Grille grille) {
@@ -29,7 +29,7 @@ public class Grille {
         }
     }
     
-    public void effacerCases() {
+    public void reinitialiserGrille() {
         for (int ligne = 0; ligne != 3; ligne++) {
             for (int colonne = 0; colonne != 3; colonne++) {
                 cases[ligne][colonne] = EEtatCase.VIDE;
@@ -121,7 +121,7 @@ public class Grille {
         // On teste si la grille est pleine
         boolean pleine = true;
         for (int x = 0; x < 3; x++) {
-            for (int y = 1; y < 3; y++) {
+            for (int y = 0; y < 3; y++) {
                 if (cases[x][y] == EEtatCase.VIDE)
                     pleine = false;
             }

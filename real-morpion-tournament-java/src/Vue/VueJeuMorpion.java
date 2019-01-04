@@ -8,15 +8,19 @@ package Vue;
 import Utilitaires.Enums.EAction;
 import Utilitaires.Enums.EEtatCase;
 import Utilitaires.Enums.MyButton;
+import Utilitaires.Messages.MBouge;
 import Utilitaires.Messages.MClicCase;
 import Utilitaires.Messages.Message;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -30,10 +34,12 @@ import javax.swing.SwingConstants;
  *
  * @author grosa
  */
-public class VueJeuMorpion extends Observable {
+public class VueJeuMorpion extends Observable implements ComponentListener {
     
     private JFrame fenetre;
     private final int defaultWidth = 400;
+    
+    private Point position = new Point();
     
     private JLabel nomJoueurCourant;
     private JLabel iconeSymboleActuel;
@@ -47,7 +53,7 @@ public class VueJeuMorpion extends Observable {
         fenetre.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
         // Définit la taille de la fenêtre en pixels
         fenetre.setSize(defaultWidth, (int)(defaultWidth*1.4)-30); //Ratio 1:1.618
-        fenetre.setResizable(false);
+        fenetre.setResizable(true);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         fenetre.setLocation(dim.width/2-fenetre.getSize().width/2, dim.height/2-fenetre.getSize().height/2);
         fenetre.setTitle("Grille de jeu");
@@ -125,6 +131,27 @@ public class VueJeuMorpion extends Observable {
         fenetre.add(agencementFenetre);
     }
     
+    @Override
+    public void componentMoved(ComponentEvent arg0) {
+        notifyObservers(new MBouge(EAction.BOUGE, getPosition().x - position.x, getPosition().y - position.y));
+    }
+    
+    @Override
+    public void componentResized(ComponentEvent arg0) {}
+    @Override
+    public void componentShown(ComponentEvent arg0) {}
+    @Override
+    public void componentHidden(ComponentEvent arg0) {}
+    
+    public void setPosition(int x, int y) {
+        fenetre.setLocation(x, y);
+        position = fenetre.getLocation();
+    }
+    
+    public Point getPosition() {
+        return fenetre.getLocation();
+    }
+    
     public void setEtatCase(EEtatCase etat, int ligne, int colonne) {
         
         switch (etat) {
@@ -165,5 +192,12 @@ public class VueJeuMorpion extends Observable {
     
     public void afficherFenetre(boolean afficher) {
         fenetre.setVisible(afficher);
+    }
+
+    /**
+     * @return the defaultWidth
+     */
+    public int getDefaultWidth() {
+        return defaultWidth;
     }
 }
