@@ -25,5 +25,23 @@ import javax.swing.JTextField;
  * @author grosa
  */
 public class VueReglesJeu extends Observable {
+    private JFrame fenetre;
+    private final int defaultWidth=400;
+    
+    public VueReglesJeu(){
+        fenetre = new JFrame();
+        fenetre.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
+        // Définit la taille de la fenêtre en pixels
+        fenetre.setSize(defaultWidth, (int)(defaultWidth*1.4)-30);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        fenetre.setLocation(dim.width/2-fenetre.getSize().width/2, dim.height/2-fenetre.getSize().height/2);
+        
+        
+        
+        
+        
+        
+    }
+    
     
 }

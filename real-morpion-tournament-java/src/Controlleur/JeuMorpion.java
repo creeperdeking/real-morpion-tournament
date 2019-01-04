@@ -197,10 +197,9 @@ public class JeuMorpion implements Observer {
         genererMatchs();
         
 
-        HashMap<String,Integer> ListeNomScore=new HashMap<>();
-        
-        
-        ArrayList<String> noms=new ArrayList<>();
+        HashMap<String,Integer> ListeNomScore=new HashMap<>();    
+        ArrayList noms=new ArrayList<>();
+
         ArrayList<String[]> confrontations = new ArrayList();
         for (Joueur joueurs[] : matchs) {
             String conf[] = {joueurs[0].getIdentifiant(), joueurs[1].getIdentifiant()};
@@ -216,7 +215,9 @@ public class JeuMorpion implements Observer {
         vueConfrontation.addObserver(this);
         
         vueClassement.setPosition(positionVueJeu.x - vueClassement.getDefaultWidth(), positionVueJeu.y);
+       
         vueClassement.afficherFenetre(true);
+        vueClassement.addObserver(this);
         
         vueJeuMorpion.afficherFenetre(true);
         prochainMatch();

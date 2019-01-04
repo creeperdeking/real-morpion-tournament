@@ -40,6 +40,10 @@ public class VueClassement extends Observable {
     private JLabel labelDeScore;
     
     public VueClassement(ArrayList<String> noms){
+          
+        for(String  nom : noms){
+            listeNomScore.put(nom,0);
+        }
         
         fenetre = new JFrame();
         fenetre.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
@@ -54,9 +58,7 @@ public class VueClassement extends Observable {
         
         
         
-        for(String  nom : noms){
-            listeNomScore.put(nom,0);
-        }
+     
        
         
         //liste de nom
@@ -66,6 +68,7 @@ public class VueClassement extends Observable {
         labelDeNom=new JLabel();
         
         for (int i=1;i<=10;i++){
+          
             labelDeNoms.add(labelDeNom);
             panelListeNom.add(labelDeNom);
             
@@ -103,25 +106,16 @@ public class VueClassement extends Observable {
         
         labelDeScores=new ArrayList<>();
         labelDeScore=new JLabel();
+        
         for (int i=1;i<=10;i++){
             panelListeScore.add(labelDeScore);
         
         }
-        
-        
-        
-        
-       
+
         panelEast.add(panelListeScore,BorderLayout.CENTER);
         panelEast.setPreferredSize(new Dimension(110,660));
         
         mainPanel.add(panelEast,BorderLayout.EAST);
-        
-
-        
-        
-        
-        
         
         
         fenetre.add(mainPanel);
@@ -129,9 +123,10 @@ public class VueClassement extends Observable {
         
         
      }
-    public void setScoreJouer(String nom,int socre){
+    public void setScoreJoueur(String nom,Integer score){
         listeNomScore=new HashMap<String,Integer>();
-        listeNomScore.put(nom, socre);
+        this.labelDeNom=new JLabel(nom);
+        this.labelDeScore=new JLabel(score.toString());
        
         List<Map.Entry<String, Integer>> infoIds = new ArrayList<Map.Entry<String, Integer>>(listeNomScore.entrySet());
         //==============avant trié===================
@@ -142,6 +137,7 @@ public class VueClassement extends Observable {
         
         //=============trieé par le score=========================
        Collections.sort(infoIds, new Comparator<Map.Entry<String, Integer>>() {   
+             @Override
              public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {      
              return (o2.getValue() - o1.getValue()); 
         //return (o1.getKey()).toString().compareTo(o2.getKey());
@@ -180,12 +176,5 @@ public class VueClassement extends Observable {
     public void afficherFenetre(boolean aff) {
         fenetre.setVisible(aff);
     }
-
-    private JPanel getCellule(int i) {
-        JPanel panelCellule = new JPanel();
-        return panelCellule ;
-    }
-    
-
 
 }
