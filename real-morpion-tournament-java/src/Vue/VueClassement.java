@@ -66,7 +66,6 @@ public class VueClassement extends Observable {
         
         labelDeNoms=new ArrayList<>();
         labelDeNom=new JLabel();
-        
         for (int i=1;i<=10;i++){
           
             labelDeNoms.add(labelDeNom);
@@ -117,6 +116,7 @@ public class VueClassement extends Observable {
         
         mainPanel.add(panelEast,BorderLayout.EAST);
         
+       
         
         fenetre.add(mainPanel);
         
