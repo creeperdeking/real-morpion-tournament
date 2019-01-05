@@ -202,6 +202,7 @@ public class JeuMorpion implements Observer {
         for(Joueur j:joueurs){
             String nom=j.getIdentifiant();
             noms.add(nom);
+            vueClassement.setScoreJoueur(nom, ListeNomScore.get(nom).intValue());
         }
 
         ArrayList<String[]> confrontations = new ArrayList();
