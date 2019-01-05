@@ -73,7 +73,7 @@ public class VueClassement extends Observable {
             
         
         }
-        this.actualiserListe();
+       
         
         JLabel joueur=new JLabel("Joueur");
         joueur.setBorder(new MatteBorder(0, 0,1, 0, Color.GRAY));
@@ -116,12 +116,12 @@ public class VueClassement extends Observable {
         
         mainPanel.add(panelEast,BorderLayout.EAST);
         
-       
+        this.actualiserListe(); 
         
         fenetre.add(mainPanel);
         
         
-        
+      
      }
     public void setScoreJoueur(String nom,Integer score){
         listeNomScore=new HashMap<String,Integer>();
