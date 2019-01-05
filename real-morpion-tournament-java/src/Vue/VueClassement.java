@@ -51,7 +51,7 @@ public class VueClassement extends Observable {
         fenetre = new JFrame();
         fenetre.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
         // Définit la taille de la fenêtre en pixels
-        fenetre.setSize(defaultWidth, (int)(defaultWidth*1.4)-30);
+        fenetre.setSize(defaultWidth, (int)(defaultWidth*1.6));
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         fenetre.setLocation(dim.width/2-fenetre.getSize().width/2, dim.height/2-fenetre.getSize().height/2);
        
