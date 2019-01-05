@@ -12,5 +12,6 @@ package Utilitaires.Enums;
 public enum ECategorieAge {
     ENFANT,
     ADO,
-    SENIOR
+    ADULTE,
+    SENIOR;
 }

@@ -17,8 +17,9 @@ public class Joueur {
     
     private int nbPoints = 0;
     
-    public Joueur(String identifiant) {
+    public Joueur(String identifiant, ECategorieAge categorieAge) {
         this.identifiant = identifiant;
+        this.categorieAge = categorieAge;
     }
     
     public void addScore(int points) {

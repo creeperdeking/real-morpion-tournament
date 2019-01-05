@@ -36,8 +36,6 @@ public class VueClassement extends Observable {
     private final JFrame fenetre;
     private ArrayList<JLabel> labelDeNoms;
     private ArrayList<JLabel> labelDeScores;
-    private JLabel labelDeNom;
-    private JLabel labelDeScore;
     
     public VueClassement(ArrayList<String> noms){
           
@@ -65,13 +63,11 @@ public class VueClassement extends Observable {
         JPanel panelListeNom=new JPanel(new GridLayout(10,1));
         
         labelDeNoms=new ArrayList<>();
-        labelDeNom=new JLabel();
+        
         for (int i=1;i<=10;i++){
-          
+            JLabel labelDeNom=new JLabel();
             labelDeNoms.add(labelDeNom);
             panelListeNom.add(labelDeNom);
-            
-        
         }
        
         
@@ -104,9 +100,10 @@ public class VueClassement extends Observable {
         JPanel panelListeScore=new JPanel(new GridLayout(10,1));
         
         labelDeScores=new ArrayList<>();
-        labelDeScore=new JLabel();
+        
         
         for (int i=1;i<=10;i++){
+            JLabel labelDeScore=new JLabel();
             panelListeScore.add(labelDeScore);
             labelDeScores.add(labelDeScore);
         }
@@ -123,10 +120,8 @@ public class VueClassement extends Observable {
         
       
      }
-    public void setScoreJoueur(String nom,Integer score){
+    public void setScoreJoueur(String nom,Integer score) {
         listeNomScore=new HashMap<String,Integer>();
-        this.labelDeNom=new JLabel(nom);
-        this.labelDeScore=new JLabel(score.toString());
        
         List<Map.Entry<String, Integer>> infoIds = new ArrayList<Map.Entry<String, Integer>>(listeNomScore.entrySet());
         //==============avant trié===================

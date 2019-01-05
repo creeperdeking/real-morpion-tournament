@@ -6,6 +6,7 @@
 package Vue;
 
 import Utilitaires.Enums.EAction;
+import Utilitaires.Enums.ECategorieAge;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -45,6 +46,7 @@ public class VueInscriptionJoueurs extends Observable{
     private JButton boutonCommencer;
     private JTextField textFieldNom;
     private JList listeNomsJoueurs;
+    private JSlider curseurAge;
     private DefaultListModel nomsListModel;
     
     
@@ -111,7 +113,7 @@ public class VueInscriptionJoueurs extends Observable{
                                                   + "adaptée à son âge:");
         sousPanelDroitHautBas.add(labelInterfaceAdaptee, BorderLayout.NORTH);
         
-        JSlider curseurAge = new JSlider(0,3);
+        curseurAge = new JSlider(0,3);
         curseurAge.setPaintLabels(true);
         
         Hashtable position = new Hashtable();
@@ -158,9 +160,22 @@ public class VueInscriptionJoueurs extends Observable{
            @Override
            public void actionPerformed(ActionEvent arg0) {
                setChanged();
-               ArrayList <String> noms = new ArrayList();
-               noms.add(textFieldNom.getText());
-               MInscriptionJoueurs ins = new MInscriptionJoueurs(EAction.AJOUTER, noms);
+               ECategorieAge cat;
+               switch (curseurAge.getValue()) {
+                   case 0:
+                       cat = ECategorieAge.ENFANT;
+                       break;
+                   case 1:
+                       cat = ECategorieAge.ADO;
+                       break;
+                   case 2:
+                       cat = ECategorieAge.ADULTE;
+                       break;
+                   default:
+                       cat = ECategorieAge.SENIOR;
+                       break;
+               }
+               MInscriptionJoueurs ins = new MInscriptionJoueurs(EAction.AJOUTER, textFieldNom.getText(), cat);
                notifyObservers(ins);
                clearChanged();
             }

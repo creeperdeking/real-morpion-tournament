@@ -6,6 +6,7 @@
 package Vue;
 
 import Utilitaires.Enums.EAction;
+import Utilitaires.Enums.ECategorieAge;
 import Utilitaires.Enums.EEtatCase;
 import Utilitaires.Enums.MyButton;
 import Utilitaires.Messages.MBouge;
@@ -14,13 +15,17 @@ import Utilitaires.Messages.Message;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -28,6 +33,7 @@ import javax.swing.JPanel;
 
 import java.util.Observable;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
         
 /**
@@ -45,6 +51,23 @@ public class VueJeuMorpion extends Observable implements ComponentListener{
     private JLabel iconeSymboleActuel;
     
     private MyButton bCases[][];
+    
+    private ECategorieAge categorieAge;
+    
+    private int imgSize = 70;
+    private String path = "src/images/";
+    private ImageIcon image_croix;
+    private ImageIcon image_rond;
+    
+    private ImageIcon croix_enfant = new ImageIcon(new ImageIcon(path+"croix_enfant.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_DEFAULT));
+    private ImageIcon croix_ado = new ImageIcon(new ImageIcon(path+"croix_ado.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_DEFAULT));
+    private ImageIcon croix_adulte = new ImageIcon(new ImageIcon(path+"croix_adulte.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_DEFAULT));
+    private ImageIcon croix_senior = new ImageIcon(new ImageIcon(path+"croix_senior.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_DEFAULT));
+    private ImageIcon rond_enfant = new ImageIcon(new ImageIcon(path+"rond_enfant.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_DEFAULT));
+    private ImageIcon rond_ado = new ImageIcon(new ImageIcon(path+"rond_ado.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_DEFAULT));
+    private ImageIcon rond_adulte = new ImageIcon(new ImageIcon(path+"rond_adulte.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_DEFAULT));
+    private ImageIcon rond_senior = new ImageIcon(new ImageIcon(path+"rond_senior.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_DEFAULT));
+    private ImageIcon vide = new ImageIcon(new ImageIcon(path+"vide.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_DEFAULT));
     
     public VueJeuMorpion() {
         bCases = new MyButton[3][3];
@@ -65,7 +88,9 @@ public class VueJeuMorpion extends Observable implements ComponentListener{
         JPanel panelPresentationJoueur = new JPanel(new BorderLayout(0, 0));
         
         JLabel texteTourDe = new JLabel("Tour de :", SwingConstants.CENTER);
+        texteTourDe.setFont(new Font("Arial", Font.BOLD, 20));
         nomJoueurCourant = new JLabel("Jean Jacques", SwingConstants.CENTER);
+        nomJoueurCourant.setFont(new Font("Arial", Font.BOLD, 15));
         iconeSymboleActuel = new JLabel();
         
         JPanel barre = new JPanel();
@@ -83,7 +108,7 @@ public class VueJeuMorpion extends Observable implements ComponentListener{
         pannelGrille.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
         for (int ligne = 2; ligne >= 0; ligne--) {
             for (int colonne = 0; colonne < 3; colonne++) {
-                MyButton button = new MyButton("_", ligne, colonne);
+                MyButton button = new MyButton(vide, ligne, colonne);
                 button.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
 
                 button.addActionListener(new ActionListener() {
@@ -94,6 +119,18 @@ public class VueJeuMorpion extends Observable implements ComponentListener{
                         notifyObservers(new MClicCase(EAction.CLIC_CASE, ((MyButton) e.getSource()).getLigne(), ((MyButton) e.getSource()).getColonne()));
                         clearChanged();
                     }});
+
+                button.addMouseListener(new MouseListener() {
+                    public void mouseEntered(MouseEvent e) {
+                        notifyObservers(new MClicCase(EAction.HOVER, ((MyButton) e.getSource()).getLigne(), ((MyButton) e.getSource()).getColonne()));
+                    }
+                    public void mouseExited(MouseEvent e) {
+                        notifyObservers(new MClicCase(EAction.EXIT_HOVER, ((MyButton) e.getSource()).getLigne(), ((MyButton) e.getSource()).getColonne()));
+                    }
+                    public void mouseReleased(MouseEvent e) {}
+                    public void mousePressed(MouseEvent e) {}
+                    public void mouseClicked(MouseEvent e) {}
+                    });
                 bCases[ligne][colonne] = button;
                 pannelGrille.add(button);
             }
@@ -141,6 +178,14 @@ public class VueJeuMorpion extends Observable implements ComponentListener{
         clearChanged();
     }
     
+    public void setHover(EEtatCase symboleJoueur, int ligne, int colonne) {
+        
+    }
+    
+    public void stopHover(int ligne, int colonne) {
+        
+    }
+    
     @Override
     public void componentResized(ComponentEvent arg0) {}
     @Override
@@ -161,13 +206,13 @@ public class VueJeuMorpion extends Observable implements ComponentListener{
         
         switch (etat) {
             case VIDE:
-                bCases[ligne][colonne].setText("_");
+                bCases[ligne][colonne].setIcon(vide);
                 break;
             case CROIX:
-                bCases[ligne][colonne].setText("X");
+                bCases[ligne][colonne].setIcon(image_croix);
                 break;
             case ROND:
-                bCases[ligne][colonne].setText("O");
+                bCases[ligne][colonne].setIcon(image_rond);
                 break;
         }
     }
@@ -179,10 +224,34 @@ public class VueJeuMorpion extends Observable implements ComponentListener{
     public void setSymboleJoueurCourant(EEtatCase etat) {
         switch (etat) {
             case CROIX:
-                iconeSymboleActuel.setText("X");
+                iconeSymboleActuel.setIcon(image_croix);
                 break;
             case ROND:
-                iconeSymboleActuel.setText("O");
+                iconeSymboleActuel.setIcon(image_rond);
+                break;
+        }
+    }
+    
+    public void setCategorieAge(ECategorieAge catAge) {
+        categorieAge = catAge;
+        switch (catAge) {
+            case ENFANT:
+                image_croix = croix_enfant;
+                image_rond = rond_enfant;
+                break;
+            case ADO:
+                image_croix = croix_ado;
+                image_rond = rond_ado;
+                break;
+            case ADULTE:
+                image_croix = croix_adulte;
+                image_rond = rond_adulte;
+                break;
+            case SENIOR:
+                image_croix = croix_senior;
+                image_rond = rond_senior;
+                break;
+            default:
                 break;
         }
     }
@@ -190,7 +259,7 @@ public class VueJeuMorpion extends Observable implements ComponentListener{
     public void reinitialiserGrille() {
         for (int ligne = 2; ligne >= 0; ligne--) {
             for (int colonne = 0; colonne < 3; colonne++) {
-                bCases[ligne][colonne].setText("_");
+                bCases[ligne][colonne].setIcon(vide);
             }
         }
     }

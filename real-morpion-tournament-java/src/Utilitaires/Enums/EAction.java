@@ -16,5 +16,7 @@ public enum EAction {
     REGLES_JEU,
     RETOUR,
     CLIC_CASE,
+    HOVER,
+    EXIT_HOVER,
     BOUGE;
 }

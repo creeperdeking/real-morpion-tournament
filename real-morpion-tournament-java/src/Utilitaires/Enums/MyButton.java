@@ -5,6 +5,8 @@
  */
 package Utilitaires.Enums;
 
+import java.awt.Color;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 /**
@@ -14,10 +16,11 @@ import javax.swing.JButton;
 public class MyButton extends JButton {
     private int ligne, colonne ;
     
-    public MyButton(String label, int ligne, int colonne) {
-        super(label) ;
-        this.ligne = ligne ;
-        this.colonne = colonne ;
+    public MyButton(ImageIcon image, int ligne, int colonne) {
+        super(image);
+        this.ligne = ligne;
+        this.colonne = colonne;
+        this.setBackground(new Color(236, 204, 179));
     }
 
     /**

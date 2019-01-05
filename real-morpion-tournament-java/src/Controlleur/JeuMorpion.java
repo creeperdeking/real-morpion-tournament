@@ -8,6 +8,7 @@ package Controlleur;
 import Modele.Grille;
 import Modele.Joueur;
 import Utilitaires.Enums.EAction;
+import Utilitaires.Enums.ECategorieAge;
 import Utilitaires.Enums.EEtatCase;
 import Utilitaires.Messages.MBouge;
 import Utilitaires.Messages.MClicCase;
@@ -57,10 +58,10 @@ public class JeuMorpion implements Observer {
     }
     
     public void lancerJeu() {
-        ajouterJoueur("A");
-        ajouterJoueur("B");
-        ajouterJoueur("C");
-        ajouterJoueur("D");
+        ajouterJoueur("A", ECategorieAge.ADO);
+        ajouterJoueur("B", ECategorieAge.ENFANT);
+        ajouterJoueur("C", ECategorieAge.ADULTE);
+        ajouterJoueur("D", ECategorieAge.SENIOR);
         vueInscriptionJoueurs.afficherFenetre(true);
     }
     
@@ -84,14 +85,20 @@ public class JeuMorpion implements Observer {
         vueJeuMorpion.reinitialiserGrille();
         if (indiceMatchActuel < matchs.size()) {
             adversairesCourant = matchs.get(indiceMatchActuel);
-
+            
             numeroJoueurCourant = 1;
             prochainTour(); // Le joueur courant deviens j1
             vueConfrontation.prochainMatch();
         }
         else {
-            JOptionPane.showMessageDialog(null, "Fin du tournoi!", "Information", JOptionPane.OK_OPTION);
+            finTournoi();
         }
+    }
+    
+    public void finTournoi() {
+        JOptionPane.showMessageDialog(null, "Fin du tournoi!", "Information", JOptionPane.OK_OPTION);
+        vueJeuMorpion.afficherFenetre(false);
+        vueConfrontation.afficherFenetre(false);
     }
     
     public void prochainTour() {
@@ -137,6 +144,7 @@ public class JeuMorpion implements Observer {
     
     private void actualiserAffichageJoueur() {
         String nomJoueurCourant = adversairesCourant[numeroJoueurCourant].getIdentifiant();
+        vueJeuMorpion.setCategorieAge(adversairesCourant[numeroJoueurCourant].getCategorieAge());
         vueJeuMorpion.setNomJoueurCourant(nomJoueurCourant);
         
         if (numeroJoueurCourant == 0)
@@ -145,7 +153,7 @@ public class JeuMorpion implements Observer {
             vueJeuMorpion.setSymboleJoueurCourant(EEtatCase.ROND);
     }
     
-    private boolean ajouterJoueur(String nomJoueur) {
+    private boolean ajouterJoueur(String nomJoueur, ECategorieAge catAge) {
         boolean existeDeja = false;
         for (Joueur j : joueurs) {
             if (j.getIdentifiant().equals(nomJoueur))
@@ -153,7 +161,7 @@ public class JeuMorpion implements Observer {
         }
                             
         if (!existeDeja) {
-            joueurs.add(new Joueur(nomJoueur));
+            joueurs.add(new Joueur(nomJoueur, catAge));
             vueInscriptionJoueurs.addJoueur(nomJoueur);
         }
         
@@ -239,7 +247,8 @@ public class JeuMorpion implements Observer {
                 switch (action) {
                     case AJOUTER:
                         String nomJoueur = ((MInscriptionJoueurs) arg1).getNomJoueurs().get(0);
-                        if (!ajouterJoueur(nomJoueur))
+                        ECategorieAge catAge = ((MInscriptionJoueurs) arg1).getCatAge();
+                        if (!ajouterJoueur(nomJoueur, catAge))
                             JOptionPane.showMessageDialog(vueInscriptionJoueurs.getWindow(), "Deux joueurs ne peuvent pas avoir le même nom!");
                         break;
                     case SUPPRIMER:
