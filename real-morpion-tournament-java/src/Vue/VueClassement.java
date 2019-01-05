@@ -108,7 +108,7 @@ public class VueClassement extends Observable {
         
         for (int i=1;i<=10;i++){
             panelListeScore.add(labelDeScore);
-        
+            labelDeScores.add(labelDeScore);
         }
 
         panelEast.add(panelListeScore,BorderLayout.CENTER);
