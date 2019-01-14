@@ -5,10 +5,17 @@
  */
 package Controlleur;
 
+import Utilitaires.Enums.EAction;
+import Utilitaires.Messages.Message;
+import java.util.Observable;
+import java.util.Observer;
+
 /**
  *
  * @author grosa
  */
-public class ReglesJeu {
+public class ReglesJeu{
+
+
     
 }

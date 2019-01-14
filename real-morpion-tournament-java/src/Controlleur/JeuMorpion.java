@@ -52,6 +52,7 @@ public class JeuMorpion implements Observer {
     private int ancienne_ligne, ancienne_colonne;
     
     public JeuMorpion() {
+        this.vueClassement=vueClassement;
         vueJeuMorpion.addObserver(this);
         vueReglesJeu.addObserver(this);
         vueInscriptionJoueurs.addObserver(this);
@@ -262,7 +263,23 @@ public class JeuMorpion implements Observer {
     }
     
     private void lancerReglesJeu() {
-        
+        vueReglesJeu.afficherFenetre(true);
+    }
+    
+    private void fermerReglesJeu(){
+        vueReglesJeu.afficherFenetre(false);
+    
+    }
+    
+    private void fermerVueClassement(){
+        vueClassement.afficherFenetre(false);
+        vueConfrontation.afficherFenetre(false);
+        vueJeuMorpion.afficherFenetre(false);
+    
+    }
+    
+    private void prochainPaneRegle(){
+    
     }
     
     @Override
@@ -319,9 +336,19 @@ public class JeuMorpion implements Observer {
                             else
                                commencerTournoi();
                             break;
+                      
                    }
                 }
+ 
                 else if (arg0 instanceof VueReglesJeu) {
+           
+                    switch(msg.getAction()){
+                        case FERMER:
+                            fermerReglesJeu();
+                        case CONTINUER:
+                            prochainPaneRegle();
+                        break;
+                    }
                     
                 }
                 else if (arg0 instanceof VueJeuMorpion) {
@@ -335,7 +362,11 @@ public class JeuMorpion implements Observer {
                     }
                 }
                 else if (arg0 instanceof VueClassement) {
-                    
+                    switch(msg.getAction()){
+                        case FERMER:
+                            fermerVueClassement();
+                            break;
+                    }
                 }
                 else if (arg0 instanceof VueConfrontations) {
                     

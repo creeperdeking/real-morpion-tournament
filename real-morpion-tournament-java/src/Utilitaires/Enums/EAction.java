@@ -18,5 +18,6 @@ public enum EAction {
     CLIC_CASE,
     HOVER,
     EXIT_HOVER,
-    BOUGE;
+    BOUGE,
+    FERMER;
 }
