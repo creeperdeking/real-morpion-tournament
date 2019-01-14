@@ -7,6 +7,7 @@ package Vue;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -47,7 +48,7 @@ public class VueConfrontations extends Observable {
         fenetre = new JFrame("Confrontations");
         
         fenetre.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-        fenetre.setSize(250, 500);
+        fenetre.setSize(300, 500);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         fenetre.setLocation(dim.width/2-fenetre.getSize().width/2, dim.height/2-fenetre.getSize().height/2);
         fenetre.setResizable(true);
@@ -57,8 +58,10 @@ public class VueConfrontations extends Observable {
         
         JPanel panelHaut = new JPanel(new BorderLayout());
         JLabel labelEnTete = new JLabel("Nombre de matchs restant: ");
+        labelEnTete.setFont(new Font("Arial", Font.BOLD, 17));
         
         labelNbMatchs = new JLabel(String.valueOf(nbMatchsTotal));
+        labelNbMatchs.setFont(new Font("Arial", Font.BOLD, 20));
         
         panelHaut.add(labelEnTete, BorderLayout.WEST);
         panelHaut.add(labelNbMatchs, BorderLayout.EAST);

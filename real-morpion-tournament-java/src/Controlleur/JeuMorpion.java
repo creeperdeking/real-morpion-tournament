@@ -88,6 +88,7 @@ public class JeuMorpion implements Observer {
             
             numeroJoueurCourant = 1;
             prochainTour(); // Le joueur courant deviens j1
+            retour_arriere_possible = false;
             vueConfrontation.prochainMatch();
         }
         else {
@@ -107,13 +108,13 @@ public class JeuMorpion implements Observer {
         EEtatCase gagne = grille.chercherSiEtatFinal();
         if (gagne != null) {
             if (gagne == EEtatCase.VIDE) {
-                JOptionPane.showMessageDialog(null, "Egalité", "Information", JOptionPane.OK_OPTION);
+                JOptionPane.showMessageDialog(null, "Egalité: +1 Points chacun!", "Information", JOptionPane.OK_OPTION);
                 adversairesCourant[0].addScore(1);
                 adversairesCourant[1].addScore(1);
             }
             else {
                 Joueur gagnant = adversairesCourant[gagne.getNumero()];
-                JOptionPane.showMessageDialog(null, gagnant.getIdentifiant()+" gagne ce match!", "Information", JOptionPane.OK_OPTION);
+                JOptionPane.showMessageDialog(null, gagnant.getIdentifiant()+" gagne ce match! +3 Points pour lui!", "Information", JOptionPane.OK_OPTION);
                 gagnant.addScore(3);
             }
             prochainMatch();
@@ -133,12 +134,12 @@ public class JeuMorpion implements Observer {
         
     private void annulerTourPrecedent() {
         retour_arriere_possible = false;
-        
+
         vueJeuMorpion.setEtatCase(EEtatCase.VIDE, ancienne_ligne, ancienne_colonne);
         grille.setEtatCase(EEtatCase.VIDE, ancienne_ligne, ancienne_colonne);
-        
+
         joueurSuivant();
-        
+
         actualiserAffichageJoueur();
     }
     
@@ -199,13 +200,35 @@ public class JeuMorpion implements Observer {
         return caseVide;
     }
     
+    private boolean gererHover(int ligne, int colonne) {
+        boolean caseVide = grille.getEtatCase(ligne, colonne) == EEtatCase.VIDE;
+        
+        if (caseVide) {
+            EEtatCase symboleJoueur = EEtatCase.getCase(numeroJoueurCourant);
+            if (numeroJoueurCourant == 1)
+                symboleJoueur = EEtatCase.ROND;
+            
+            vueJeuMorpion.setHover(symboleJoueur, ligne, colonne);
+        }
+        return caseVide;
+    }
+    
+    private boolean gererStopHover(int ligne, int colonne) {
+        boolean caseVide = grille.getEtatCase(ligne, colonne) == EEtatCase.VIDE;
+        
+        if (caseVide) {
+            vueJeuMorpion.stopHover(ligne, colonne);
+        }
+        return caseVide;
+    }
+    
+    
     private void commencerTournoi() {
         
         vueInscriptionJoueurs.afficherFenetre(false);
         genererMatchs();
         
 
-        HashMap<String,Integer> ListeNomScore=new HashMap<>();    
         ArrayList<String> noms=new ArrayList<>();
         for(Joueur j:joueurs){
             String nom=j.getIdentifiant();
@@ -220,6 +243,7 @@ public class JeuMorpion implements Observer {
         vueConfrontation = new VueConfrontations(confrontations);
         
         vueClassement=new VueClassement(noms);
+        vueClassement.setScoreJoueur("A", 10);
         
         Point positionVueJeu = vueJeuMorpion.getPosition();
         vueConfrontation.setPosition(positionVueJeu.x + vueJeuMorpion.getDefaultWidth(), positionVueJeu.y);
@@ -259,7 +283,19 @@ public class JeuMorpion implements Observer {
             }
             else if(arg1 instanceof MClicCase) {
                 MClicCase mes = (MClicCase)arg1;
-                gererClicCase(mes.getLigne(), mes.getColonne());
+                EAction action = mes.getAction();
+                
+                switch (action) {
+                    case CLIC_CASE:
+                        gererClicCase(mes.getLigne(), mes.getColonne());
+                        break;
+                    case HOVER:
+                        gererHover(mes.getLigne(), mes.getColonne());
+                        break;
+                    case EXIT_HOVER:
+                        gererStopHover(mes.getLigne(), mes.getColonne());
+                        break;
+                }
             }
             else if(arg1 instanceof MBouge) {
                 MBouge mes = (MBouge)arg1;
