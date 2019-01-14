@@ -35,9 +35,9 @@ public class VueClassement extends Observable {
     private final int defaultWidth=400;
     private final JFrame fenetre;
     private ArrayList<JLabel> labelDeNoms;
+   
     private ArrayList<JLabel> labelDeScores;
-    private JLabel labelDeNom;
-    private JLabel labelDeScore;
+
     
     public VueClassement(ArrayList<String> noms){
           
@@ -62,7 +62,7 @@ public class VueClassement extends Observable {
         JPanel panelListeNom=new JPanel(new GridLayout(10,1));
         labelDeNoms=new ArrayList<>();    
         for (int i=1;i<=10;i++){
-            labelDeNom=new JLabel();
+            JLabel labelDeNom=new JLabel();
             labelDeNoms.add(labelDeNom);
             panelListeNom.add(labelDeNom);
          }
@@ -78,7 +78,7 @@ public class VueClassement extends Observable {
        
         
         for (int i=1;i<=10;i++){
-            labelDeScore=new JLabel();
+            JLabel labelDeScore=new JLabel();
             panelListeScore.add(labelDeScore);
             labelDeScores.add(labelDeScore);
         }
@@ -111,11 +111,13 @@ public class VueClassement extends Observable {
     
     
     public void setScoreJoueur(String nom,Integer score){
-        listeNomScore=new HashMap<String,Integer>();
-        this.labelDeNom=new JLabel(nom);
-        this.labelDeScore=new JLabel(score.toString());
+        
+        listeNomScore.put(nom, score);
+        this.actualiserListe();
+     
+        
        
-        List<Map.Entry<String, Integer>> infoIds = new ArrayList<Map.Entry<String, Integer>>(listeNomScore.entrySet());
+     /*   List<Map.Entry<String, Integer>> infoIds = new ArrayList<Map.Entry<String, Integer>>(listeNomScore.entrySet());
         //==============avant trié===================
         for(int i=0;i<infoIds.size();i++){
             String id=infoIds.get(i).toString();
@@ -134,18 +136,19 @@ public class VueClassement extends Observable {
             for(int i=0;i<infoIds.size();i++){
                 String id=infoIds.get(i).toString();
             
-            }
+            } */
        
     }
     
     public void actualiserListe(){
-        int cptr = 0;
-        for (String nom : listeNomScore.keySet()){
-            JLabel labelNom = labelDeNoms.get(cptr);
-            labelNom.setText(nom);
-            JLabel labelScore=labelDeScores.get(cptr);
-            labelScore.setText(listeNomScore.get(nom).toString());
-            cptr ++;
+        int ctr=0;
+        
+        for(Map.Entry<String,Integer> entry:listeNomScore.entrySet()){
+           
+            labelDeNoms.get(ctr).setText(entry.getKey());
+            labelDeScores.get(ctr).setText(entry.getValue().toString());
+           
+            ctr++;
         }
     }
     

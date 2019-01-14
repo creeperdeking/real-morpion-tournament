@@ -25,6 +25,11 @@ public class Joueur {
     public void addScore(int points) {
         nbPoints += points;
     }
+    
+    public int getScore(){
+        return nbPoints;
+    
+    }
 
     /**
      * @return the identifiant

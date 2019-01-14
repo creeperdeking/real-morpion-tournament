@@ -55,6 +55,7 @@ public class JeuMorpion implements Observer {
         vueJeuMorpion.addObserver(this);
         vueReglesJeu.addObserver(this);
         vueInscriptionJoueurs.addObserver(this);
+        
     }
     
     public void lancerJeu() {
@@ -104,18 +105,21 @@ public class JeuMorpion implements Observer {
     
     public void prochainTour() {
         retour_arriere_possible = true;
-        
+       
         EEtatCase gagne = grille.chercherSiEtatFinal();
         if (gagne != null) {
             if (gagne == EEtatCase.VIDE) {
                 JOptionPane.showMessageDialog(null, "Egalité: +1 Points chacun!", "Information", JOptionPane.OK_OPTION);
                 adversairesCourant[0].addScore(1);
                 adversairesCourant[1].addScore(1);
+                vueClassement.setScoreJoueur(adversairesCourant[0].getIdentifiant(), adversairesCourant[0].getScore());
+                vueClassement.setScoreJoueur(adversairesCourant[1].getIdentifiant(), adversairesCourant[1].getScore());
             }
             else {
                 Joueur gagnant = adversairesCourant[gagne.getNumero()];
                 JOptionPane.showMessageDialog(null, gagnant.getIdentifiant()+" gagne ce match! +3 Points pour lui!", "Information", JOptionPane.OK_OPTION);
                 gagnant.addScore(3);
+                vueClassement.setScoreJoueur(adversairesCourant[gagne.getNumero()].getIdentifiant(), adversairesCourant[gagne.getNumero()].getScore());
             }
             prochainMatch();
         }
@@ -228,7 +232,6 @@ public class JeuMorpion implements Observer {
         vueInscriptionJoueurs.afficherFenetre(false);
         genererMatchs();
         
-        HashMap<String,Integer> ListeNomScore=new HashMap<>();
         ArrayList<String> noms=new ArrayList<>();
         for(Joueur j:joueurs){
             String nom=j.getIdentifiant();
@@ -244,7 +247,6 @@ public class JeuMorpion implements Observer {
         vueConfrontation = new VueConfrontations(confrontations);
         
         vueClassement=new VueClassement(noms);
-        vueClassement.setScoreJoueur("A", 10);
         
         Point positionVueJeu = vueJeuMorpion.getPosition();
         vueConfrontation.setPosition(positionVueJeu.x + vueJeuMorpion.getDefaultWidth(), positionVueJeu.y);
