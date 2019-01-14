@@ -37,7 +37,6 @@ public class VueReglesJeu extends Observable {
     public VueReglesJeu() {
         fenetre = new JFrame();
         fenetre.setTitle("Regles du Jeu");
-        fenetre.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
         // Définit la taille de la fenêtre en pixels
         fenetre.setSize(defaultWidth, (int)(defaultWidth*1.4));
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();

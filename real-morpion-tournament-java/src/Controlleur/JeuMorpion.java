@@ -52,11 +52,9 @@ public class JeuMorpion implements Observer {
     private int ancienne_ligne, ancienne_colonne;
     
     public JeuMorpion() {
-        this.vueClassement=vueClassement;
         vueJeuMorpion.addObserver(this);
         vueReglesJeu.addObserver(this);
         vueInscriptionJoueurs.addObserver(this);
-        
     }
     
     public void lancerJeu() {
@@ -100,6 +98,7 @@ public class JeuMorpion implements Observer {
     
     public void finTournoi() {
         JOptionPane.showMessageDialog(null, "Fin du tournoi!", "Information", JOptionPane.OK_OPTION);
+        vueClassement.center();
         vueJeuMorpion.afficherFenetre(false);
         vueConfrontation.afficherFenetre(false);
     }
@@ -271,11 +270,50 @@ public class JeuMorpion implements Observer {
     
     }
     
-    private void fermerVueClassement(){
-        vueClassement.afficherFenetre(false);
-        vueConfrontation.afficherFenetre(false);
-        vueJeuMorpion.afficherFenetre(false);
+    private void relancerJeu(){
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+        int dialogResult = JOptionPane.showConfirmDialog (null, "Etes vous sûr de voulour revenir à l'écran d'inscription des joueurs?","Attention!",dialogButton);
+        if(dialogResult == JOptionPane.YES_OPTION){
+            vueJeuMorpion.afficherFenetre(false);
+            vueReglesJeu.afficherFenetre(false);
+            vueConfrontation.afficherFenetre(false);
+            vueClassement.afficherFenetre(false);
+            
+            vueJeuMorpion = new VueJeuMorpion();
+            vueReglesJeu = new VueReglesJeu();
+            vueInscriptionJoueurs = new VueInscriptionJoueurs();
+            grille = new Grille();
+
+            joueurs = new ArrayList();
+            adversairesCourant = new Joueur[2];
+            matchs = new ArrayList();
+            indiceMatchActuel = -1;
+
+            retour_arriere_possible = false;
+
+            vueJeuMorpion.addObserver(this);
+            vueReglesJeu.addObserver(this);
+            vueInscriptionJoueurs.addObserver(this);
+
+            lancerJeu();
+        }
+        
+    }
     
+    private void relancerPartie() {
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+        int dialogResult = JOptionPane.showConfirmDialog (null, "Etes vous sûr de voulour relancer la partie?","Attention!",dialogButton);
+        if(dialogResult == JOptionPane.YES_OPTION){
+            vueJeuMorpion.afficherFenetre(false);
+            vueReglesJeu.afficherFenetre(false);
+            vueInscriptionJoueurs.afficherFenetre(false);
+            vueConfrontation.afficherFenetre(false);
+            vueClassement.afficherFenetre(false);
+            
+            matchs = new ArrayList();
+            
+            commencerTournoi();
+        }
     }
     
     private void prochainPaneRegle(){
@@ -320,7 +358,8 @@ public class JeuMorpion implements Observer {
             else if(arg1 instanceof MBouge) {
                 MBouge mes = (MBouge)arg1;
                 Point posVueConfrontation = vueConfrontation.getPosition();
-                
+                Point posVueClassement = vueClassement.getPosition();
+                vueClassement.setPosition(posVueClassement.x+mes.getDeltaX(), posVueClassement.y+mes.getDeltaY());
                 vueConfrontation.setPosition(posVueConfrontation.x+mes.getDeltaX(), posVueConfrontation.y+mes.getDeltaY());
             }
             else { // Si il s'agit d'un message normal
@@ -364,7 +403,10 @@ public class JeuMorpion implements Observer {
                 else if (arg0 instanceof VueClassement) {
                     switch(msg.getAction()){
                         case FERMER:
-                            fermerVueClassement();
+                            relancerJeu();
+                            break;
+                        case SUPPRIMER:
+                            relancerPartie();
                             break;
                     }
                 }

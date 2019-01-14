@@ -269,7 +269,7 @@ public class VueJeuMorpion extends Observable implements ComponentListener{
             case ENFANT:
                 image_croix = croix_enfant;
                 image_rond = rond_enfant;
-                currentPenCursor = kit.createCustomCursor(curseur_stylo, new Point(0, 39), "Stylo");
+                currentPenCursor = kit.createCustomCursor(curseur_stylo, new Point(0, 30), "Stylo");
                 reinitialiserCurseurs(currentPenCursor);
                 break;
             case ADO:
@@ -283,7 +283,7 @@ public class VueJeuMorpion extends Observable implements ComponentListener{
             case SENIOR:
                 image_croix = croix_senior;
                 image_rond = rond_senior;
-                currentPenCursor = kit.createCustomCursor(curseur_stylo, new Point(0, 39), "Stylo");
+                currentPenCursor = kit.createCustomCursor(curseur_stylo, new Point(0, 30), "Stylo");
                 reinitialiserCurseurs(currentPenCursor);
                 break;
             default:
