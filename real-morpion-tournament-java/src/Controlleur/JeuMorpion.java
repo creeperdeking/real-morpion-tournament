@@ -71,9 +71,7 @@ public class JeuMorpion implements Observer {
                 if (adversaire == joueur)
                     continue;
                 Joueur paire1[] = {joueur, adversaire};
-                Joueur paire2[] = {adversaire, joueur};
                 matchs.add(paire1);
-                matchs.add(paire2);
             }
             Collections.shuffle(matchs);
         }
@@ -330,8 +328,12 @@ public class JeuMorpion implements Observer {
                     case AJOUTER:
                         String nomJoueur = ((MInscriptionJoueurs) arg1).getNomJoueurs().get(0);
                         ECategorieAge catAge = ((MInscriptionJoueurs) arg1).getCatAge();
-                        if (!ajouterJoueur(nomJoueur, catAge))
-                            JOptionPane.showMessageDialog(vueInscriptionJoueurs.getWindow(), "Deux joueurs ne peuvent pas avoir le même nom!");
+                        if (!nomJoueur.equals("")) {
+                            if (!ajouterJoueur(nomJoueur, catAge))
+                                JOptionPane.showMessageDialog(vueInscriptionJoueurs.getWindow(), "Deux joueurs ne peuvent pas avoir le même nom!");
+                        }
+                        else
+                            JOptionPane.showMessageDialog(vueInscriptionJoueurs.getWindow(), "Un joueur doit avoir un nom!");
                         break;
                     case SUPPRIMER:
                         ArrayList<String> nomJoueurs = ((MInscriptionJoueurs) arg1).getNomJoueurs();
@@ -375,7 +377,6 @@ public class JeuMorpion implements Observer {
                             else
                                commencerTournoi();
                             break;
-                      
                    }
                 }
  

@@ -27,9 +27,12 @@ import javax.swing.JSlider;
 import Utilitaires.Messages.MInscriptionJoueurs;
 import Utilitaires.Messages.Message;
 import java.awt.Color;
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 /**
@@ -40,20 +43,31 @@ public class VueInscriptionJoueurs extends Observable{
     
     private JFrame fenetre;
     
-    private JButton boutonAjouter;
     private JButton boutonRetirer;
     private JButton boutonReglesJeu;
     private JButton boutonCommencer;
+    
+    private JButton bEnfant;
+    private JButton bAdo;
+    private JButton bAdulte;
+    private JButton bSenior;
+    
     private JTextField textFieldNom;
     private JList listeNomsJoueurs;
-    private JSlider curseurAge;
     private DefaultListModel nomsListModel;
     
+    private int imgSize = 30;
+    private String path = "src/images/";
+    
+    private ImageIcon enfant = new ImageIcon(new ImageIcon(path+"enfant.png").getImage().getScaledInstance(imgSize, imgSize*2, Image.SCALE_DEFAULT));
+    private ImageIcon ado = new ImageIcon(new ImageIcon(path+"ado.png").getImage().getScaledInstance(imgSize, imgSize*2, Image.SCALE_DEFAULT));
+    private ImageIcon adulte = new ImageIcon(new ImageIcon(path+"adulte.png").getImage().getScaledInstance(imgSize, imgSize*2, Image.SCALE_DEFAULT));
+    private ImageIcon senior = new ImageIcon(new ImageIcon(path+"senior.png").getImage().getScaledInstance(imgSize, imgSize*2, Image.SCALE_DEFAULT));
     
     public VueInscriptionJoueurs() {
         fenetre = new JFrame("Inscrire les joueurs");
         fenetre.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-        fenetre.setSize(600, 250);
+        fenetre.setSize(650, 300);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         fenetre.setLocation(dim.width/2-fenetre.getSize().width/2, dim.height/2-fenetre.getSize().height/2);
         fenetre.setResizable(true);
@@ -98,6 +112,7 @@ public class VueInscriptionJoueurs extends Observable{
         
         // Sous-panel haut centre:
         JPanel sousPanelDroitHautCentre = new JPanel(new BorderLayout(10, 30));
+        sousPanelDroitHautCentre.setBorder(new EmptyBorder(10,0,0,0));
         pannelDroitHaut.add(sousPanelDroitHautCentre, BorderLayout.CENTER);
         
         sousPanelDroitHautCentre.add(new JLabel("Ecrivez le nom du joueurs:"), BorderLayout.WEST);
@@ -111,27 +126,27 @@ public class VueInscriptionJoueurs extends Observable{
         
         JLabel labelInterfaceAdaptee = new JLabel("Choisissez l'interface "
                                                   + "adaptée à son âge:");
+        labelInterfaceAdaptee.setBorder(new EmptyBorder(10,0,0,0));
         sousPanelDroitHautBas.add(labelInterfaceAdaptee, BorderLayout.NORTH);
         
-        curseurAge = new JSlider(0,3);
-        curseurAge.setPaintLabels(true);
+        JPanel panelCurseur = new JPanel(new GridLayout(1,4));
         
-        Hashtable position = new Hashtable();
-        position.put(0, new JLabel("Enfant"));
-        position.put(1, new JLabel("Ado"));
-        position.put(2, new JLabel("Adulte"));
-        position.put(3, new JLabel("Senior"));
+        bEnfant = new JButton("Enfant");
+        bEnfant.setIcon(enfant);
+        bAdo = new JButton("Ado");
+        bAdo.setIcon(ado);
+        bAdulte = new JButton("Adulte");
+        bAdulte.setIcon(adulte);
+        bSenior = new JButton("Senior");
+        bSenior.setIcon(senior);
         
-        curseurAge.setLabelTable(position);
-      
-        JPanel panelCurseur = new JPanel();
-        panelCurseur.add(curseurAge);
+        panelCurseur.add(bEnfant);
+        panelCurseur.add(bAdo);
+        panelCurseur.add(bAdulte);
+        panelCurseur.add(bSenior);
         
-        sousPanelDroitHautBas.add(curseurAge, BorderLayout.CENTER);
+        sousPanelDroitHautBas.add(panelCurseur, BorderLayout.CENTER);
         
-        boutonAjouter = new JButton("Ajouter ce joueur");
-        boutonAjouter.setSize(80, 10);
-        sousPanelDroitHautBas.add(boutonAjouter, BorderLayout.SOUTH);
         
         // --------- Panel Bas -----------
         JPanel downrightPan = new JPanel(new GridLayout(1,3,5,5));
@@ -156,30 +171,41 @@ public class VueInscriptionJoueurs extends Observable{
             }
          });
         
-        boutonAjouter.addActionListener(new ActionListener() {
-           @Override
-           public void actionPerformed(ActionEvent arg0) {
-               setChanged();
-               ECategorieAge cat;
-               switch (curseurAge.getValue()) {
-                   case 0:
-                       cat = ECategorieAge.ENFANT;
-                       break;
-                   case 1:
-                       cat = ECategorieAge.ADO;
-                       break;
-                   case 2:
-                       cat = ECategorieAge.ADULTE;
-                       break;
-                   default:
-                       cat = ECategorieAge.SENIOR;
-                       break;
-               }
-               MInscriptionJoueurs ins = new MInscriptionJoueurs(EAction.AJOUTER, textFieldNom.getText(), cat);
-               notifyObservers(ins);
-               clearChanged();
+        bEnfant.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                setChanged();
+                notifyObservers(new MInscriptionJoueurs(EAction.AJOUTER, textFieldNom.getText(), ECategorieAge.ENFANT));
+                clearChanged();
             }
-        });
+         });
+        
+        bAdo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                setChanged();
+                notifyObservers(new MInscriptionJoueurs(EAction.AJOUTER, textFieldNom.getText(), ECategorieAge.ADO));
+                clearChanged();
+            }
+         });
+        
+        bAdulte.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                setChanged();
+                notifyObservers(new MInscriptionJoueurs(EAction.AJOUTER, textFieldNom.getText(), ECategorieAge.ADULTE));
+                clearChanged();
+            }
+         });
+        
+        bSenior.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                setChanged();
+                notifyObservers(new MInscriptionJoueurs(EAction.AJOUTER, textFieldNom.getText(), ECategorieAge.SENIOR));
+                clearChanged();
+            }
+         });
         
         boutonReglesJeu.addActionListener(new ActionListener() {
             @Override
