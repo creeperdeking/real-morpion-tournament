@@ -21,6 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.MatteBorder;
         
@@ -33,12 +34,14 @@ public class VueReglesJeu extends Observable {
     private final int defaultWidth=400;
     private JButton fermer=new JButton("Fermer");
     private JButton suivant=new JButton("Suivant");
+    private JTextArea regle=new JTextArea(5,20);
     
+    private JLabel titre;
     public VueReglesJeu() {
         fenetre = new JFrame();
         fenetre.setTitle("Regles du Jeu");
         // Définit la taille de la fenêtre en pixels
-        fenetre.setSize(defaultWidth, (int)(defaultWidth*1.4));
+        fenetre.setSize(defaultWidth, (int)(defaultWidth*0.7));
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         fenetre.setLocation(dim.width/2-fenetre.getSize().width/2, dim.height/2-fenetre.getSize().height/2);
         
@@ -51,7 +54,7 @@ public class VueReglesJeu extends Observable {
         JPanel paneAvecButton=new JPanel(new BorderLayout());
         
         paneImage.add(paneAvecImage);
-        
+        paneImage.setBorder(new MatteBorder(0, 0, 1, 1, Color.GRAY));
         paneImage.add(paneAvecButton);
         
         paneAvecButton.add(fermer,BorderLayout.SOUTH);
@@ -61,8 +64,11 @@ public class VueReglesJeu extends Observable {
         JPanel paneTitre=new JPanel();
         JPanel paneText=new JPanel();
         JPanel paneSuivent=new JPanel();
-        paneTitre.add(new JLabel("Titre"));
-        paneText.add(new JLabel(""));
+        titre = new JLabel();
+        paneTitre.add(titre);
+        
+        regle.setText("Le but du jeu de morpion est\n"+" d’avoir un alignement en ligne\n"+" ou en diagonale de trois symboles\n"+" identiques. Pour cela, lorsque\n"+" c’est votre tour (votre nom et\n"+" votre symbole est écrit en haut\n"+" du plateau de jeu lorsque c’est votre\n"+" tour), cliquez sur une des cases\n"+" du plateau pour poser votre symbole.\n");
+        paneText.add(regle);
         paneSuivent.add(suivant);
         
         paneRegle.add(paneTitre,BorderLayout.NORTH);
@@ -75,6 +81,16 @@ public class VueReglesJeu extends Observable {
         
         fenetre.add(panePrincipale);
         
+        
+        suivant.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+              setChanged();
+              notifyObservers(new Message(EAction.CONTINUER));
+              clearChanged();
+            }
+        });
         
         fermer.addActionListener(new ActionListener() {
 
@@ -93,7 +109,18 @@ public class VueReglesJeu extends Observable {
         fenetre.setVisible(afficher);
     }
  
+ public void afficherRegleMorpion(){
+     titre.setText("Regle du Morpion");
+     regle.setText("Le but du jeu de morpion est\n"+" d’avoir un alignement en ligne\n"+" ou en diagonale de trois symboles\n"+" identiques. Pour cela, lorsque\n"+" c’est votre tour (votre nom et\n"+" votre symbole est écrit en haut\n"+" du plateau de jeu lorsque c’est votre\n"+" tour), cliquez sur une des cases\n"+" du plateau pour poser votre symbole.\n");
  
+    }
+
+ public void afficherRegleTournoi(){
+     titre.setText("Regle du Tournoi");
+     regle.setText("Pour le tournoi, l’ensemble des\n"+"joueurs joue contre tous les autres\n"+" une fois. Pour suivre le déroulement\n"+" du tournoi, observez le panneau \n"+"“Confrontations” à droite. Le but\n"+" du tournoi est d’avoir le plus de points.\n"+" A chaque égalité, les adversaires\n"+" gagnent 1 points chacuns, et\n"+" à chaque victoire, le gagnant gagne\n"+" trois points. Le panneau “Classement”\n"+" se trouve à gauche.\n");
+
+
+    } 
 
     
 }

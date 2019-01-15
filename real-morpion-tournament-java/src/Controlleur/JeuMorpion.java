@@ -261,6 +261,7 @@ public class JeuMorpion implements Observer {
     
     private void lancerReglesJeu() {
         vueReglesJeu.afficherFenetre(true);
+        vueReglesJeu.afficherRegleMorpion();
     }
     
     private void fermerReglesJeu(){
@@ -315,7 +316,7 @@ public class JeuMorpion implements Observer {
     }
     
     private void prochainPaneRegle(){
-    
+        vueReglesJeu.afficherRegleTournoi();
     }
     
     @Override
