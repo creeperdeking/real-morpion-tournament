@@ -310,6 +310,7 @@ public class JeuMorpion implements Observer {
             vueClassement.afficherFenetre(false);
             
             matchs = new ArrayList();
+            indiceMatchActuel = -1;
             
             commencerTournoi();
         }

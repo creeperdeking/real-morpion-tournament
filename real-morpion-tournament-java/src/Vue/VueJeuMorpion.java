@@ -60,21 +60,21 @@ public class VueJeuMorpion extends Observable implements ComponentListener{
     private ImageIcon image_croix;
     private ImageIcon image_rond;
     
-    private ImageIcon croix_enfant = new ImageIcon(new ImageIcon(path+"croix_enfant.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_DEFAULT));
-    private ImageIcon croix_ado = new ImageIcon(new ImageIcon(path+"croix_ado.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_DEFAULT));
-    private ImageIcon croix_adulte = new ImageIcon(new ImageIcon(path+"croix_adulte.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_DEFAULT));
-    private ImageIcon croix_senior = new ImageIcon(new ImageIcon(path+"croix_senior.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_DEFAULT));
-    private ImageIcon rond_enfant = new ImageIcon(new ImageIcon(path+"rond_enfant.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_DEFAULT));
-    private ImageIcon rond_ado = new ImageIcon(new ImageIcon(path+"rond_ado.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_DEFAULT));
-    private ImageIcon rond_adulte = new ImageIcon(new ImageIcon(path+"rond_adulte.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_DEFAULT));
-    private ImageIcon rond_senior = new ImageIcon(new ImageIcon(path+"rond_senior.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_DEFAULT));
-    private ImageIcon vide = new ImageIcon(new ImageIcon(path+"vide.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_DEFAULT));
-    private ImageIcon rond_transparent = new ImageIcon(new ImageIcon(path+"rond_transparent.png").getImage().getScaledInstance(imgSize-10, imgSize-10, Image.SCALE_DEFAULT));
-    private ImageIcon croix_transparente = new ImageIcon(new ImageIcon(path+"croix_transparente.png").getImage().getScaledInstance(imgSize-10, imgSize-10, Image.SCALE_DEFAULT));
+    private ImageIcon croix_enfant = new ImageIcon(new ImageIcon(path+"croix_enfant.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_SMOOTH));
+    private ImageIcon croix_ado = new ImageIcon(new ImageIcon(path+"croix_ado.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_SMOOTH));
+    private ImageIcon croix_adulte = new ImageIcon(new ImageIcon(path+"croix_adulte.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_SMOOTH));
+    private ImageIcon croix_senior = new ImageIcon(new ImageIcon(path+"croix_senior.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_SMOOTH));
+    private ImageIcon rond_enfant = new ImageIcon(new ImageIcon(path+"rond_enfant.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_SMOOTH));
+    private ImageIcon rond_ado = new ImageIcon(new ImageIcon(path+"rond_ado.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_SMOOTH));
+    private ImageIcon rond_adulte = new ImageIcon(new ImageIcon(path+"rond_adulte.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_SMOOTH));
+    private ImageIcon rond_senior = new ImageIcon(new ImageIcon(path+"rond_senior.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_SMOOTH));
+    private ImageIcon vide = new ImageIcon(new ImageIcon(path+"vide.png").getImage().getScaledInstance(imgSize, imgSize, Image.SCALE_SMOOTH));
+    private ImageIcon rond_transparent = new ImageIcon(new ImageIcon(path+"rond_transparent.png").getImage().getScaledInstance(imgSize-10, imgSize-10, Image.SCALE_SMOOTH));
+    private ImageIcon croix_transparente = new ImageIcon(new ImageIcon(path+"croix_transparente.png").getImage().getScaledInstance(imgSize-10, imgSize-10, Image.SCALE_SMOOTH));
     
-    private ImageIcon icone_gomme = new ImageIcon(new ImageIcon(path+"gomme.png").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
-    private ImageIcon icone_livre = new ImageIcon(new ImageIcon(path+"livre.png").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
-    private Image curseur_stylo = new ImageIcon(path+"stylo.png").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+    private ImageIcon icone_gomme = new ImageIcon(new ImageIcon(path+"gomme.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
+    private ImageIcon icone_livre = new ImageIcon(new ImageIcon(path+"livre.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
+    private Image curseur_stylo = new ImageIcon(path+"stylo.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
     
     private Font bigFont = new Font("Arial", Font.BOLD, 17);
     private final Cursor defaultCursor = new Cursor(Cursor.DEFAULT_CURSOR);
